@@ -24,8 +24,8 @@ export const monopoly = {
     repurchaseCity,
     upgradeBuilding,
     payRent,
-    airportMove: (G: any, ctx: any) => {
-      //player can move to any city that not owned by other player
-    },
+    // airportMove: (G: any, ctx: any) => {
+    //   //player can move to any city that not owned by other player
+    // },
   },
 };
