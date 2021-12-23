@@ -1,7 +1,4 @@
 import { blocksData } from "src/data/blocksData";
-import { priceMultiplier } from "src/data/priceMultiplier";
-import { INVALID_MOVE } from "boardgame.io/core";
-import { findCurrentBlock, getBlockPrice } from "src/utils/utilities";
 import { purchaseCity } from "src/moves/purchaseCity";
 import { repurchaseCity } from "src/moves/repurchaseCity";
 import { upgradeBuilding } from "src/moves/upgradeBuilding";
@@ -26,8 +23,5 @@ export const monopoly = {
     upgradeBuilding,
     payRent,
     airportMove,
-    // airportMove: (G: any, ctx: any) => {
-    //   //player can move to any city that not owned by other player
-    // },
   },
 };
