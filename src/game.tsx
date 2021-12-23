@@ -8,6 +8,7 @@ import { upgradeBuilding } from "src/moves/upgradeBuilding";
 import { diceMove } from "src/moves/diceMove";
 import { cheatMove } from "src/moves/cheatMove";
 import { payRent } from "src/moves/payRent";
+import { availAirportMove, airportMove } from "src/moves/airportMove";
 export const monopoly = {
   // create a board with 31 blocks
   setup: () => ({
@@ -24,6 +25,7 @@ export const monopoly = {
     repurchaseCity,
     upgradeBuilding,
     payRent,
+    airportMove,
     // airportMove: (G: any, ctx: any) => {
     //   //player can move to any city that not owned by other player
     // },
