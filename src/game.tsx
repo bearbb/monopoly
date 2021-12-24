@@ -5,23 +5,85 @@ import { upgradeBuilding } from "src/moves/upgradeBuilding";
 import { diceMove } from "src/moves/diceMove";
 import { cheatMove } from "src/moves/cheatMove";
 import { payRent } from "src/moves/payRent";
+import { sellAsset } from "src/moves/sellAsset";
 import { availAirportMove, airportMove } from "src/moves/airportMove";
+import { isMonopoly, bankruptList } from "src/utils/utilities";
+import { isDouble } from "src/utils/rollRules";
 export const monopoly = {
   // create a board with 31 blocks
   setup: () => ({
     playerPositions: Array(31).fill([]),
-    playerMoney: Array(4).fill(800000),
+    playerMoney: Array(4).fill(8000000),
     blocksData,
     blockOwners: Array(31).fill(null),
+    playerId: [0, 1, 2, 3],
+    rollCount: Array(4).fill(0),
+    diceRolled: Array(4).fill([0, 0]),
   }),
 
+  turn: {
+    minMoves: 1,
+    maxMoves: 3,
+    onEnd: (G: any, ctx: any) => {
+      G.diceRolled[ctx.currentPlayer] = [0, 0];
+    },
+    //TODO: auto end turn if there is no more move can make
+    //end turn if there is no state
+    stages: {
+      diceMove: {
+        start: true,
+        moves: {
+          diceMove,
+        },
+        // next: "sell",
+      },
+      specialMove: {
+        moves: {
+          airportMove,
+          cheatMove,
+        },
+        // next: "sell",
+      },
+      sell: {
+        moves: {
+          sellAsset,
+        },
+        // next: "purchase",
+      },
+      purchase: {
+        moves: {
+          purchaseCity,
+          repurchaseCity,
+          upgradeBuilding,
+        },
+        // next: "specialMove",
+      },
+    },
+  },
+
+  phases: {},
   moves: {
     diceMove,
     cheatMove,
     purchaseCity,
     repurchaseCity,
     upgradeBuilding,
-    payRent,
     airportMove,
+    sellAsset,
+    setPlayerMoney: (G: any, ctx: any) => {
+      G.playerMoney[ctx.currentPlayer] = 0;
+    },
+  },
+  endIf: (G: any, ctx: any) => {
+    if (isMonopoly(G.blockOwners)) {
+      return { winner: ctx.currentPlayer };
+    }
+    let bankruptPlayerList = bankruptList(G.playerMoney, G.blockOwners);
+    if (bankruptPlayerList.length == 3) {
+      let winnerId = G.playerId.filter(
+        (id: number) => !bankruptPlayerList.includes(id)
+      );
+      return { winner: winnerId };
+    }
   },
 };

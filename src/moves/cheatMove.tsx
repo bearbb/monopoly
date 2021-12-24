@@ -1,3 +1,4 @@
+import { isHaveToPayRent, payRent } from "src/moves/payRent";
 import { findCurrentBlock } from "src/utils/utilities";
 export const cheatMove = (G: any, ctx: any, blockIdToTeleTo: number) => {
   const userId = ctx.currentPlayer;
@@ -18,4 +19,9 @@ export const cheatMove = (G: any, ctx: any, blockIdToTeleTo: number) => {
   console.log(
     `Current position is in ${G.blocksData[incomingPos].cityName} in block ${incomingPos}`
   );
+  if (isHaveToPayRent(G, ctx)) {
+    payRent(G, ctx);
+  } else {
+    //this block could be not owned or owned by this player
+  }
 };

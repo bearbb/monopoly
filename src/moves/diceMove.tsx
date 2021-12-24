@@ -1,4 +1,5 @@
 import { findCurrentBlock } from "src/utils/utilities";
+import { isHaveToPayRent, payRent } from "src/moves/payRent";
 //roll dices
 const rollDices = (): { firstDice: number; secondDice: number } => {
   let firstDice = Math.floor(Math.random() * 6) + 1;
@@ -11,6 +12,7 @@ export const diceMove = (G: any, ctx: any) => {
   const userId = ctx.currentPlayer;
   //roll dices
   const diceValue = rollDices();
+  G.diceRolled[ctx.currentPlayer] = [diceValue.firstDice, diceValue.secondDice];
   console.log(
     "Dice value rolled is: " +
       diceValue.firstDice +
@@ -34,6 +36,15 @@ export const diceMove = (G: any, ctx: any) => {
   //add userId to new block pos
   G.playerPositions[incomingPos].push(userId);
   console.log(`Current position is in ${G.blocksData[incomingPos].cityName}`);
+  //check if current pos have to pay rent or not?
+  if (isHaveToPayRent(G, ctx)) {
+    payRent(G, ctx);
+  } else {
+    //this block could be not owned or owned by this player
+  }
   //TODO: If player rolled double mean 2 dices with the same number => one more turn
+
   //TODO: If player have rolled 3 time continuously, that player go to prison which block index is 8
+  //Move to next stage
+  ctx.events.setActivePlayers({ currentPlayer: "purchase", maxMoves: 1 });
 };
