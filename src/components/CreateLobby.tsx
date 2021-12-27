@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { FormLabel, Button, Box, Input, Flex, Heading } from "@chakra-ui/react";
+import {
+  FormLabel,
+  Button,
+  Box,
+  Input,
+  Flex,
+  Heading,
+  Checkbox,
+} from "@chakra-ui/react";
 
-export const CreatePlayer = () => {
-  const [username, setUsername] = useState<String>("");
-  const usernameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
-  };
+export const CreateLobby = () => {
+  const [isCheckedState, setIsCheckedState] = useState<Boolean>(false);
+  const [displayAtt, setDisplayAtt] = useState<"none" | "block">("none");
   useEffect(() => {
-    console.log(username);
+    if (isCheckedState) {
+      setDisplayAtt("block");
+    } else {
+      setDisplayAtt("none");
+    }
     return () => {};
-  }, [username]);
+  }, [isCheckedState]);
   return (
     <Flex
-      id="CreatePlayer"
+      id="CreateLobby"
       alignItems="center"
       justifyContent="center"
       height="100vh"
@@ -20,7 +30,7 @@ export const CreatePlayer = () => {
       flexDirection="column"
     >
       <Heading as="h1" m="50" size="2xl">
-        create player
+        create lobby
       </Heading>
       <Flex
         flexDirection="row"
@@ -70,27 +80,31 @@ export const CreatePlayer = () => {
           w=""
           justifyContent="center"
         >
-          <FormLabel
-            htmlFor="usernameInput"
-            fontWeight="extrabold"
-            fontSize="4xl"
+          <Checkbox
+            value="password"
+            size="lg"
+            colorScheme="orange"
+            onChange={(e) => {
+              setIsCheckedState(e.target.checked);
+            }}
           >
-            username
-          </FormLabel>
+            password
+          </Checkbox>
           <Input
-            id="usernameInput"
-            placeholder="input ur username"
+            id="passwordInput"
+            placeholder="input ur lobby password"
             variant="filled"
             mb={3}
             borderWidth={3}
             focusBorderColor="blackAlpha.500"
             size="lg"
             w="50%"
-            onChange={(e) => {
-              usernameHandler(e);
-            }}
+            display={displayAtt}
+            //     onChange={(e) => {
+            //       usernameHandler(e);
+            //     }}
           ></Input>
-          <Button size="lg" colorScheme="orange" w="fit-content">
+          <Button size="lg" colorScheme="orange" w="fit-content" mt={10}>
             create
           </Button>
         </Flex>

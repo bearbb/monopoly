@@ -1,18 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { FormLabel, Button, Box, Input, Flex, Heading } from "@chakra-ui/react";
+import {
+  FormLabel,
+  FormLabelProps,
+  Button,
+  Box,
+  Input,
+  Flex,
+  Heading,
+  Text,
+} from "@chakra-ui/react";
 
-export const CreatePlayer = () => {
-  const [username, setUsername] = useState<String>("");
-  const usernameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
-  };
-  useEffect(() => {
-    console.log(username);
-    return () => {};
-  }, [username]);
+const inputStyle = {
+  variant: "filled",
+  mb: 3,
+  borderWidth: 3,
+  focusBorderColor: "blackAlpha.500",
+  size: "lg",
+  w: "50%",
+};
+const boldLabel = {
+  fontWeight: 400,
+  fontSize: "3xl",
+};
+
+const Label = (props: FormLabelProps) => (
+  <FormLabel {...props} {...boldLabel}></FormLabel>
+);
+
+export const JoinLobby = () => {
+  const [lobbyId, setLobbyId] = useState<String | null>(null);
+  const [password, setPassword] = useState<String>("");
   return (
     <Flex
-      id="CreatePlayer"
+      id="CreateLobby"
       alignItems="center"
       justifyContent="center"
       height="100vh"
@@ -20,7 +40,7 @@ export const CreatePlayer = () => {
       flexDirection="column"
     >
       <Heading as="h1" m="50" size="2xl">
-        create player
+        join lobby
       </Heading>
       <Flex
         flexDirection="row"
@@ -57,10 +77,6 @@ export const CreatePlayer = () => {
               borderWidth={3}
               borderColor="blackAlpha.200"
               cursor="pointer"
-              //TODO: able to change avatar on click (change to some avail avatar)
-              //       onClick={() => {
-              //         alert("clicked");
-              //       }}
             ></Box>
           </Flex>
         </Flex>
@@ -69,29 +85,33 @@ export const CreatePlayer = () => {
           flexGrow={1.5}
           w=""
           justifyContent="center"
+          //   alignItems="flex-start"
         >
-          <FormLabel
-            htmlFor="usernameInput"
-            fontWeight="extrabold"
-            fontSize="4xl"
-          >
-            username
-          </FormLabel>
+          <Label htmlFor="lobbyIdInput" {...boldLabel}>
+            lobby id
+          </Label>
           <Input
-            id="usernameInput"
-            placeholder="input ur username"
-            variant="filled"
-            mb={3}
-            borderWidth={3}
-            focusBorderColor="blackAlpha.500"
-            size="lg"
-            w="50%"
+            id="lobbyIdInput"
+            placeholder="input ur lobby id"
+            {...inputStyle}
             onChange={(e) => {
-              usernameHandler(e);
+              setLobbyId(e.target.value);
             }}
           ></Input>
-          <Button size="lg" colorScheme="orange" w="fit-content">
-            create
+          <Label htmlFor="passwordInput" {...boldLabel}>
+            password
+          </Label>
+          <Input
+            id="passwordInput"
+            placeholder="input ur lobby password"
+            {...inputStyle}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          ></Input>
+          <Text>(leave empty if lobby not require pass)</Text>
+          <Button size="lg" colorScheme="orange" w="fit-content" mt={10}>
+            join
           </Button>
         </Flex>
       </Flex>

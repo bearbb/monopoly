@@ -10,7 +10,8 @@ import { availAirportMove, airportMove } from "src/moves/airportMove";
 import { isMonopoly, bankruptList } from "src/utils/utilities";
 import { isDouble } from "src/utils/rollRules";
 import { Game } from "boardgame.io";
-import type { blockData } from "src/data/blocksData";
+import { blockData } from "src/data/blocksData";
+
 export interface MonopolyState {
   playerPositions: any[][];
   playerMoney: number[];
