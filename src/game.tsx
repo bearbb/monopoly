@@ -9,7 +9,18 @@ import { sellAsset } from "src/moves/sellAsset";
 import { availAirportMove, airportMove } from "src/moves/airportMove";
 import { isMonopoly, bankruptList } from "src/utils/utilities";
 import { isDouble } from "src/utils/rollRules";
-export const monopoly = {
+import { Game } from "boardgame.io";
+import type { blockData } from "src/data/blocksData";
+export interface MonopolyState {
+  playerPositions: any[][];
+  playerMoney: number[];
+  blocksData: blockData[];
+  blockOwners: (number | null)[];
+  playerId: number[];
+  rollCount: number[];
+  diceRolled: number[][];
+}
+export const monopoly: Game<MonopolyState> = {
   // create a board with 31 blocks
   setup: () => ({
     playerPositions: Array(31).fill([]),
@@ -27,11 +38,18 @@ export const monopoly = {
     onEnd: (G: any, ctx: any) => {
       G.diceRolled[ctx.currentPlayer] = [0, 0];
     },
+    onBegin: (G: any, ctx: any) => {
+      ctx.events.setActivePlayers({
+        currentPlayer: "diceMove",
+        maxMoves: 1,
+        minMoves: 0,
+      });
+    },
     //TODO: auto end turn if there is no more move can make
     //end turn if there is no state
     stages: {
       diceMove: {
-        start: true,
+        // start: true,
         moves: {
           diceMove,
         },

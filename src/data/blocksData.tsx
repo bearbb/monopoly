@@ -1,10 +1,11 @@
-export const blocksData = [
+export const blocksData: blockData[] = [
   {
     type: "SPECIAL",
     cityName: null,
     specialName: "GO",
     isOwned: false,
     buildingLevel: -1,
+    // basePrice: 0,
   },
   {
     cityName: "Buôn Ma Thuột",
@@ -68,6 +69,7 @@ export const blocksData = [
     type: "SPECIAL",
     isOwned: false,
     buildingLevel: -1,
+    // basePrice: 0,
   },
   {
     cityName: "Quảng Ninh",
@@ -99,6 +101,7 @@ export const blocksData = [
     type: "FEATURE",
     isOwned: false,
     buildingLevel: -1,
+    // basePrice: 0,
   },
   {
     cityName: "Quảng Bình",
@@ -250,3 +253,12 @@ export const blocksData = [
     basePrice: 330000,
   },
 ];
+
+export interface blockData {
+  cityName: String | null;
+  specialName: String | null;
+  type: String;
+  isOwned: boolean;
+  buildingLevel: number;
+  basePrice?: number;
+}
