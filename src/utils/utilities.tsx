@@ -1,4 +1,6 @@
+import { LobbyClient } from "boardgame.io/client";
 import { priceMultiplier } from "src/data/priceMultiplier";
+import { urlData } from "src/data/urlData";
 //find current block where user pos is
 export const findCurrentBlock = (
   playerPositions: Array<number[]>,
@@ -116,3 +118,5 @@ export const bankruptList = (playerMoney: number[], blockOwners: number[]) => {
   });
   return bankruptPlayerList;
 };
+
+export const lobbyClient = new LobbyClient({ server: urlData.serverURI });

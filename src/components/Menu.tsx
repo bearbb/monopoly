@@ -1,6 +1,51 @@
 import React from "react";
+import axios from "axios";
+import { urlData } from "src/data/urlData";
 import { FormLabel, Button, Box, Input, Flex, Heading } from "@chakra-ui/react";
+
+//router
+import { useNavigate } from "react-router-dom";
+
+//contexts
+import { UserContext, useUserContext } from "src/contexts/UserContext";
+
+//boardgame
+import { lobbyClient } from "src/utils/utilities";
+
+const ButtonStyle = {
+  w: "15%",
+  size: "3xl",
+  fontSize: "2xl",
+  fontWeight: "extrabold",
+  p: 15,
+};
+
+const createLobby = async (): Promise<string> => {
+  // const data = await axios.post(`${urlData.serverURI}/games/default/create`);
+  //TODO: create handler when create get error
+  const { matchID } = await lobbyClient.createMatch("default", {
+    numPlayers: 4,
+  });
+  return matchID;
+};
+
 export const Menu = () => {
+  const navigate = useNavigate();
+  const { userData, setUserData } = useUserContext();
+  const createLobbyHandler = async () => {
+    const matchId = await createLobby();
+    if (matchId !== null) {
+      setUserData({ ...userData, lobbyId: matchId });
+      localStorage.setItem("lobbyId", matchId);
+      const { playerCredentials } = await lobbyClient.joinMatch(
+        "default",
+        matchId,
+        { playerID: "0", playerName: userData.username }
+      );
+      console.log(playerCredentials);
+      navigate("/lobby");
+    }
+  };
   return (
     <Flex
       id="Menu"
@@ -15,22 +60,20 @@ export const Menu = () => {
       </Heading>
       <Flex justifyContent="space-around" w="80%">
         <Button
-          w="15%"
-          size="3xl"
-          fontSize="2xl"
-          fontWeight="extrabold"
+          {...ButtonStyle}
           colorScheme="purple"
-          p={15}
+          onClick={() => {
+            createLobbyHandler();
+          }}
         >
           create lobby
         </Button>
         <Button
-          w="15%"
-          size="3xl"
-          fontSize="2xl"
-          fontWeight="extrabold"
+          {...ButtonStyle}
           colorScheme="orange"
-          p={15}
+          onClick={() => {
+            navigate("/join-lobby");
+          }}
         >
           join lobby
         </Button>

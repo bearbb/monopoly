@@ -1,15 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { FormLabel, Button, Box, Input, Flex, Heading } from "@chakra-ui/react";
 
+//Context
+import { useUserContext } from "src/contexts/UserContext";
+
+//Router
+import { useNavigate } from "react-router-dom";
+
 export const CreatePlayer = () => {
-  const [username, setUsername] = useState<String>("");
+  const { userData, setUserData } = useUserContext();
+  const [username, setUsername] = useState<string>("");
+  const [alert, setAlert] = useState<String>("");
+
+  //navigator
+  const navigate = useNavigate();
+
   const usernameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
   };
   useEffect(() => {
-    console.log(username);
+    // console.log(username);
     return () => {};
   }, [username]);
+
+  //on click create
+  const createPlayerHandler = () => {
+    //check if username is empty
+    if (username === "") {
+      setAlert("please enter ur username");
+    } else {
+      setUserData({ ...userData, username: username });
+      localStorage.setItem("username", username);
+      //navigate to menu page
+      navigate("/");
+    }
+  };
   return (
     <Flex
       id="CreatePlayer"
@@ -18,8 +43,9 @@ export const CreatePlayer = () => {
       height="100vh"
       minW={870}
       flexDirection="column"
+      padding={30}
     >
-      <Heading as="h1" m="50" size="2xl">
+      <Heading as="h1" mb={50} size="2xl">
         create player
       </Heading>
       <Flex
@@ -42,8 +68,8 @@ export const CreatePlayer = () => {
         >
           <Flex alignItems="flex-start" flexDirection="column">
             <FormLabel
-              fontWeight="extrabold"
-              fontSize="4xl"
+              fontWeight="bold"
+              fontSize="3xl"
               htmlFor="avatarSelector"
             >
               avatar
@@ -70,11 +96,7 @@ export const CreatePlayer = () => {
           w=""
           justifyContent="center"
         >
-          <FormLabel
-            htmlFor="usernameInput"
-            fontWeight="extrabold"
-            fontSize="4xl"
-          >
+          <FormLabel htmlFor="usernameInput" fontWeight="bold" fontSize="3xl">
             username
           </FormLabel>
           <Input
@@ -90,7 +112,14 @@ export const CreatePlayer = () => {
               usernameHandler(e);
             }}
           ></Input>
-          <Button size="lg" colorScheme="orange" w="fit-content">
+          <Button
+            size="lg"
+            colorScheme="orange"
+            w="fit-content"
+            onClick={() => {
+              createPlayerHandler();
+            }}
+          >
             create
           </Button>
         </Flex>

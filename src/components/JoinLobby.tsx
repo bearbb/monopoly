@@ -10,6 +10,15 @@ import {
   Text,
 } from "@chakra-ui/react";
 
+//router
+import { useNavigate } from "react-router-dom";
+
+//lobby instance
+import { lobbyClient } from "src/utils/utilities";
+
+//context
+import { useUserContext } from "src/contexts/UserContext";
+
 const inputStyle = {
   variant: "filled",
   mb: 3,
@@ -28,8 +37,66 @@ const Label = (props: FormLabelProps) => (
 );
 
 export const JoinLobby = () => {
-  const [lobbyId, setLobbyId] = useState<String | null>(null);
-  const [password, setPassword] = useState<String>("");
+  const navigate = useNavigate();
+  const [lobbyId, setLobbyId] = useState<string>("");
+  const [alert, setAlert] = useState<string>("");
+  const [toggleLobbyButton, setToggleLobbyButton] = useState<boolean>(false);
+  const { userData } = useUserContext();
+  // const [password, setPassword] = useState<String>("");
+
+  const joinLobbyHandler = async () => {
+    //check if lobbyId is empty
+    if (lobbyId === "") {
+      setAlert("please enter the lobby id");
+    } else {
+      //get player list first
+      try {
+        const { matchID, players, setupData } = await lobbyClient.getMatch(
+          "default",
+          lobbyId
+        );
+        let playerIndexAvail = -1;
+        //check players arr if any slot left
+        for (let i = 0; i < players.length; i++) {
+          const element = players[i];
+          if (element.name === undefined) {
+            playerIndexAvail = i;
+            break;
+          }
+        }
+        //check if already joined
+        let isJoined = false;
+        for (let i = 0; i < players.length; i++) {
+          const element = players[i];
+          if (element.name === userData.username) {
+            isJoined = true;
+          }
+        }
+        if (playerIndexAvail === -1) {
+          setAlert("lobby is full");
+        } else if (isJoined) {
+          setToggleLobbyButton(true);
+          setAlert("u r already joined");
+        } else {
+          //join lobby with that id and username
+          const playerCredential = await lobbyClient.joinMatch(
+            "default",
+            lobbyId,
+            {
+              playerID: playerIndexAvail.toString(),
+              playerName: userData.username,
+            }
+          );
+          localStorage.setItem("lobbyId", lobbyId);
+          console.log(playerCredential);
+          navigate("/lobby");
+        }
+      } catch (error) {
+        setAlert("lobby id not found");
+      }
+    }
+  };
+
   return (
     <Flex
       id="CreateLobby"
@@ -98,7 +165,10 @@ export const JoinLobby = () => {
               setLobbyId(e.target.value);
             }}
           ></Input>
-          <Label htmlFor="passwordInput" {...boldLabel}>
+          <Text color="red.400" fontWeight="bold">
+            {alert}
+          </Text>
+          {/* <Label htmlFor="passwordInput" {...boldLabel}>
             password
           </Label>
           <Input
@@ -108,11 +178,30 @@ export const JoinLobby = () => {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
-          ></Input>
-          <Text>(leave empty if lobby not require pass)</Text>
-          <Button size="lg" colorScheme="orange" w="fit-content" mt={10}>
-            join
-          </Button>
+          ></Input> */}
+          {/* <Text>(leave empty if lobby not require pass)</Text> */}
+          <Flex gap={10}>
+            <Button
+              size="lg"
+              colorScheme="orange"
+              w="fit-content"
+              mt={10}
+              onClick={() => joinLobbyHandler()}
+            >
+              join
+            </Button>
+            {toggleLobbyButton ? (
+              <Button
+                size="lg"
+                colorScheme="purple"
+                w="fit-content"
+                mt={10}
+                onClick={() => navigate("/lobby")}
+              >
+                back to lobby
+              </Button>
+            ) : null}
+          </Flex>
         </Flex>
       </Flex>
     </Flex>

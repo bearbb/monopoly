@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Client as BoardGameClient } from "boardgame.io/react";
 import { Board } from "src/Board";
 import { monopoly } from "src/game";
-import "./App.css";
+import "src/App.css";
+
 //server
 import { SocketIO } from "boardgame.io/multiplayer";
 
