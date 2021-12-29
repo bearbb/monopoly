@@ -8,7 +8,8 @@ export const blocksData: blockData[] = [
     // basePrice: 0,
   },
   {
-    cityName: "Buôn Ma Thuột",
+    // cityName: "Buôn Ma Thuột",
+    cityName: "BMT",
     specialName: null,
     type: "CITY",
     isOwned: false,
@@ -214,7 +215,7 @@ export const blocksData: blockData[] = [
     basePrice: 290000,
   },
   {
-    cityName: "Banyan Tree Lang",
+    cityName: "Banyan",
     specialName: null,
     type: "RESORT",
     isOwned: false,

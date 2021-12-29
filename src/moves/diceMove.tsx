@@ -8,10 +8,11 @@ const rollDices = (): { firstDice: number; secondDice: number } => {
 };
 //normal moves: move after roll dices
 //make current position became null and increase position by dices rolled number
-export const diceMove = (G: any, ctx: any) => {
+export const diceMove = (G: any, ctx: any, d1: number, d2: number) => {
   const userId = ctx.currentPlayer;
   //roll dices
-  const diceValue = rollDices();
+  const diceValue = { firstDice: d1, secondDice: d2 };
+  console.log(diceValue);
   G.diceRolled[ctx.currentPlayer] = [diceValue.firstDice, diceValue.secondDice];
   console.log(
     "Dice value rolled is: " +

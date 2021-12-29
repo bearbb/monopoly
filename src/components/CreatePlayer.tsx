@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FormLabel, Button, Box, Input, Flex, Heading } from "@chakra-ui/react";
 
 //Context
-import { useUserContext } from "src/contexts/UserContext";
+import { useUserContext, UserContextData } from "src/contexts/UserContext";
 
 //Router
 import { useNavigate } from "react-router-dom";
@@ -29,7 +29,9 @@ export const CreatePlayer = () => {
     if (username === "") {
       setAlert("please enter ur username");
     } else {
-      setUserData({ ...userData, username: username });
+      // setUserData((state : ) => ({ lobbyId: "", username: username }));
+      const updatedData = { ...userData, username };
+      setUserData(updatedData);
       localStorage.setItem("username", username);
       //navigate to menu page
       navigate("/");

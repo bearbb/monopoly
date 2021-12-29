@@ -24,7 +24,7 @@ const createLobby = async (): Promise<string> => {
   // const data = await axios.post(`${urlData.serverURI}/games/default/create`);
   //TODO: create handler when create get error
   const { matchID } = await lobbyClient.createMatch("default", {
-    numPlayers: 4,
+    numPlayers: 1,
   });
   return matchID;
 };
@@ -35,7 +35,9 @@ export const Menu = () => {
   const createLobbyHandler = async () => {
     const matchId = await createLobby();
     if (matchId !== null) {
-      setUserData({ ...userData, lobbyId: matchId });
+      let temp = userData;
+      temp.lobbyId = matchId;
+      setUserData({ ...temp });
       localStorage.setItem("lobbyId", matchId);
       const { playerCredentials } = await lobbyClient.joinMatch(
         "default",

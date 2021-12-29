@@ -9,10 +9,17 @@ import {
   Heading,
   Badge,
   Text,
+  Image,
 } from "@chakra-ui/react";
 
 //contexts
 import { UserContext, useUserContext } from "src/contexts/UserContext";
+
+//player token
+import token0 from "src/assets/PlayerToken/0.png";
+import token1 from "src/assets/PlayerToken/1.png";
+import token2 from "src/assets/PlayerToken/2.png";
+import token3 from "src/assets/PlayerToken/3.png";
 
 //lobby
 import { lobbyClient } from "src/utils/utilities";
@@ -39,6 +46,14 @@ export const Lobby = () => {
   const [isError, setIsError] = useState<boolean>(false);
   const { userData, setUserData } = useUserContext();
   const [isAllReady, setIsAllReady] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log(
+      `%c${userData}`,
+      "background: #292d3e; color: #f07178; font-weight: bold"
+    );
+    return () => {};
+  }, []);
 
   //FIXME: data fetch after join lobby not going right
   const getLobbyData = async () => {
@@ -70,6 +85,7 @@ export const Lobby = () => {
   };
 
   useEffect(() => {
+    console.log(userData.lobbyId);
     getLobbyData();
     return () => {};
   }, []);
@@ -157,7 +173,7 @@ const PlayerNToken = ({ ...props }: PlayerNTokenProps) => {
         {props.name === undefined ? "waiting..." : props.name}
       </Text>
       {/* </AvatarCover> */}
-      <TokenCover>{props.tokenId}</TokenCover>
+      <TokenCover tokenId={props.tokenId}></TokenCover>
       {props.isReady ? <ReadyBadge /> : <NotReadyBadge />}
     </Flex>
   );
@@ -181,15 +197,30 @@ const renderPlayerNToken = (player: PlayerData[]) => {
 const AvatarCover = (props: BoxProps) => (
   <Box {...props} w={100} h={100} borderWidth={2} borderColor="black"></Box>
 );
-const TokenCover = (props: BoxProps) => (
+const TokenCover = ({ tokenId }: { tokenId: number }) => (
   <Box
-    {...props}
-    minWidth={200}
-    minHeight={200}
+    // {...props}
+    width={200}
+    height={200}
     borderWidth={2}
     borderColor="black"
-  ></Box>
+  >
+    <Flex w="100%" h="100%" justifyContent="center" alignItems="center">
+      <Image w="70%" src={tokenSwitcher(tokenId)}></Image>
+    </Flex>
+  </Box>
 );
+const tokenSwitcher = (tokenId: number) => {
+  if (tokenId === 0) {
+    return token0;
+  } else if (tokenId === 1) {
+    return token1;
+  } else if (tokenId === 2) {
+    return token2;
+  } else {
+    return token3;
+  }
+};
 const ReadyBadge = () => (
   <Badge variant="solid" colorScheme="green" textAlign="center">
     Ready

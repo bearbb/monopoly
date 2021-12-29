@@ -18,6 +18,7 @@ import { lobbyClient } from "src/utils/utilities";
 
 //context
 import { useUserContext } from "src/contexts/UserContext";
+import { resolve } from "path";
 
 const inputStyle = {
   variant: "filled",
@@ -41,7 +42,7 @@ export const JoinLobby = () => {
   const [lobbyId, setLobbyId] = useState<string>("");
   const [alert, setAlert] = useState<string>("");
   const [toggleLobbyButton, setToggleLobbyButton] = useState<boolean>(false);
-  const { userData } = useUserContext();
+  const { userData, setUserData } = useUserContext();
   // const [password, setPassword] = useState<String>("");
 
   const joinLobbyHandler = async () => {
@@ -87,6 +88,8 @@ export const JoinLobby = () => {
               playerName: userData.username,
             }
           );
+          let temp = { ...userData, lobbyId: lobbyId };
+          setUserData(temp);
           localStorage.setItem("lobbyId", lobbyId);
           console.log(playerCredential);
           navigate("/lobby");

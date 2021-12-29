@@ -10,6 +10,7 @@ import { Menu } from "src/components/Menu";
 import { CreateLobby } from "src/components/CreateLobby";
 import { JoinLobby } from "src/components/JoinLobby";
 import { Lobby } from "src/components/Lobby";
+import { RollDice } from "src/components/RollDice";
 //Route
 import { Routes, Route, useNavigate } from "react-router-dom";
 
@@ -52,6 +53,9 @@ export const App = () => {
     username: getInitUserData().username,
     lobbyId: getInitUserData().lobbyId,
   });
+  useEffect(() => {
+    return () => {};
+  }, []);
   const navigate = useNavigate();
   useEffect(() => {
     console.log(userData);
@@ -76,7 +80,10 @@ export const App = () => {
           {/* <Route path="create-lobby" element={<CreateLobby />}></Route> */}
           <Route path="join-lobby" element={<JoinLobby />}></Route>
           <Route path="lobby" element={<Lobby />}></Route>
-          <Route path="game" element={<Client />}></Route>
+          <Route
+            path="game"
+            element={<Client matchID={`${userData.lobbyId}`} playerID="0" />}
+          ></Route>
         </Routes>
       </UserContext.Provider>
     </ChakraProvider>
