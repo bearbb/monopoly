@@ -44,6 +44,9 @@ export const Menu = () => {
         matchId,
         { playerID: "0", playerName: userData.username }
       );
+      temp.credentials = playerCredentials;
+      setUserData({ ...temp });
+      localStorage.setItem("credentials", playerCredentials);
       console.log(playerCredentials);
       navigate("/lobby");
     }

@@ -10,7 +10,6 @@ import { Menu } from "src/components/Menu";
 import { CreateLobby } from "src/components/CreateLobby";
 import { JoinLobby } from "src/components/JoinLobby";
 import { Lobby } from "src/components/Lobby";
-import { RollDice } from "src/components/RollDice";
 //Route
 import { Routes, Route, useNavigate } from "react-router-dom";
 
@@ -32,18 +31,27 @@ const theme = extendTheme({
   },
 });
 
-const getInitUserData = (): { username: string; lobbyId: string } => {
+const getInitUserData = (): {
+  username: string;
+  lobbyId: string;
+  credentials: string;
+} => {
   let username = localStorage.getItem("username");
   let lobbyId = localStorage.getItem("lobbyId");
+  let credentials = localStorage.getItem("credentials");
   let userData = {
     username: "",
     lobbyId: "",
+    credentials: "",
   };
   if (username !== null) {
     userData.username = username;
   }
   if (lobbyId !== null) {
     userData.lobbyId = lobbyId;
+  }
+  if (credentials !== null) {
+    userData.credentials = credentials;
   }
   return userData;
 };
@@ -52,6 +60,7 @@ export const App = () => {
   const [userData, setUserData] = useState<UserContextData["userData"]>({
     username: getInitUserData().username,
     lobbyId: getInitUserData().lobbyId,
+    credentials: getInitUserData().credentials,
   });
   useEffect(() => {
     return () => {};
@@ -82,7 +91,13 @@ export const App = () => {
           <Route path="lobby" element={<Lobby />}></Route>
           <Route
             path="game"
-            element={<Client matchID={`${userData.lobbyId}`} playerID="0" />}
+            element={
+              <Client
+                matchID={`${userData.lobbyId}`}
+                playerID="0"
+                credentials={userData.credentials}
+              />
+            }
           ></Route>
         </Routes>
       </UserContext.Provider>

@@ -3,7 +3,7 @@ import { Server, Origins } from "boardgame.io/server";
 
 const server = Server({
   games: [monopoly],
-  origins: [Origins.LOCALHOST],
+  origins: [Origins.LOCALHOST_IN_DEVELOPMENT],
 });
 
 server.run(8000);

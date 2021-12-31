@@ -34,6 +34,9 @@ export const diceMove = (G: any, ctx: any, d1: number, d2: number) => {
   } else {
     incomingPos = diceValue.firstDice + diceValue.secondDice;
   }
+  if (incomingPos > 31) {
+    incomingPos = incomingPos - 31;
+  }
   //add userId to new block pos
   G.playerPositions[incomingPos].push(userId);
   console.log(`Current position is in ${G.blocksData[incomingPos].cityName}`);

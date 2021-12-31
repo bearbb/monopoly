@@ -12,11 +12,12 @@ import {
   FlexProps,
   Image,
   Text,
+  Button,
 } from "@chakra-ui/react";
 
 //components
-import { RollDice } from "src/components/RollDice";
 import { Player } from "src/components/Player";
+import { Die } from "src/components/Die";
 
 //board data
 import { blocksData } from "src/data/blocksData";
@@ -27,6 +28,7 @@ import prisonImg from "src/assets/BoardImg/prison.png";
 import fifaImg from "src/assets/BoardImg/fifa.png";
 import de_airportImg from "src/assets/BoardImg/de_airport.png";
 import chancesImg from "src/assets/BoardImg/drawCard.png";
+import { Rolling } from "./components/Rolling";
 
 const MoneyBGColor = "gray.50";
 const MonopolyColorTheme = {
@@ -330,7 +332,10 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
           rounded={5}
           borderColor="gray.300"
         >
-          <RollDice G={G} ctx={ctx} moves={moves}></RollDice>
+          {/* <RollDice G={G} ctx={ctx} moves={moves}></RollDice> */}
+          <CenteredFlex id="diceRollContainer" gap={10}>
+            <Rolling G={G} ctx={ctx} moves={moves}></Rolling>
+          </CenteredFlex>
         </GridItem>
       </Grid>
     </Flex>

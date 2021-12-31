@@ -2627,6 +2627,11 @@
   "resolved" "https://registry.npmjs.org/@types/retry/-/retry-0.12.1.tgz"
   "version" "0.12.1"
 
+"@types/roll-a-die@^1.5.1":
+  "integrity" "sha512-0czR6u08TfXFjS6Iw7+3IQd8pc7wjkeUuFZO+qENIs+dX/Ol4X0PWnRYT0q95qDJKmXX/Ymjx1EUqHKqox3LaA=="
+  "resolved" "https://registry.npmjs.org/@types/roll-a-die/-/roll-a-die-1.5.1.tgz"
+  "version" "1.5.1"
+
 "@types/scheduler@*":
   "integrity" "sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew=="
   "resolved" "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz"
@@ -8437,7 +8442,12 @@
     "strip-ansi" "^6.0.1"
     "text-table" "^0.2.0"
 
-"react-dom@*", "react-dom@^16.8.0 || 17.x", "react-dom@^17.0.2", "react-dom@>=16.13", "react-dom@>=16.8", "react-dom@>=16.8 || ^17.0.0", "react-dom@>=16.8.6":
+"react-dice-roll@^1.2.2":
+  "integrity" "sha512-QNG+RVs3CymhTkNLwfDdJ93kL4vWO+luHkQAhuNxnus9jOFUZY54AJhlDa4y576S20oEuW47nO7HvEDCtST9wQ=="
+  "resolved" "https://registry.npmjs.org/react-dice-roll/-/react-dice-roll-1.2.2.tgz"
+  "version" "1.2.2"
+
+"react-dom@*", "react-dom@^16.13.1", "react-dom@^16.8.0 || 17.x", "react-dom@^17.0.2", "react-dom@>=16.13", "react-dom@>=16.8", "react-dom@>=16.8 || ^17.0.0", "react-dom@>=16.8.6":
   "integrity" "sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-17.0.2.tgz"
   "version" "17.0.2"
@@ -8598,7 +8608,7 @@
   dependencies:
     "debounce" "^1.2.1"
 
-"react@*", "react@^15.3.0 || ^16.0.0 || ^17.0.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.0 || 17.x", "react@^17.0.2", "react@>= 16", "react@>=16.13", "react@>=16.8", "react@>=16.8 || ^17.0.0", "react@>=16.8.0", "react@>=16.8.6", "react@17.0.2":
+"react@*", "react@^15.3.0 || ^16.0.0 || ^17.0.0", "react@^16.13.1", "react@^16.8.0 || ^17.0.0", "react@^16.8.0 || 17.x", "react@^17.0.2", "react@>= 16", "react@>=16.13", "react@>=16.8", "react@>=16.8 || ^17.0.0", "react@>=16.8.0", "react@>=16.8.6", "react@17.0.2":
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
   "version" "17.0.2"
@@ -8824,6 +8834,11 @@
   "version" "3.0.2"
   dependencies:
     "glob" "^7.1.3"
+
+"roll-a-die@^2.0.1":
+  "integrity" "sha512-2SbOfBoB12rgA0DG6HR5aaN1QG4FAJBDeYNwcqnkHkxDRrEUlgqB0uIhYsrf6+JITrxMwagMfd5asPHismxqaA=="
+  "resolved" "https://registry.npmjs.org/roll-a-die/-/roll-a-die-2.0.1.tgz"
+  "version" "2.0.1"
 
 "rollup-plugin-terser@^7.0.0":
   "integrity" "sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ=="
