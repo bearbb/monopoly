@@ -42,6 +42,9 @@ export const monopoly: Game<MonopolyState> = {
     },
   },
   moves: {
+    endTurn: (G: any, ctx: any) => {
+      ctx.events.endTurn();
+    },
     diceMove,
     cheatMove,
     purchaseCity,

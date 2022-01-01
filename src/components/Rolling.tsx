@@ -46,6 +46,7 @@ export const Rolling = ({
   isRollAble,
   incMoveCount,
   moveCount,
+  isCurrentPlayer,
 }: {
   G: any;
   ctx: any;
@@ -55,6 +56,7 @@ export const Rolling = ({
   nextStage: () => void;
   incMoveCount: () => void;
   moveCount: number;
+  isCurrentPlayer: boolean;
 }) => {
   const { userData, setUserData } = useUserContext();
   const [rollCount, setRollCount] = useState<number>(0);
@@ -149,7 +151,7 @@ export const Rolling = ({
           onClick={() => {
             rollDiceHandler();
           }}
-          disabled={!isRollAble}
+          disabled={!isRollAble || !isCurrentPlayer}
           border="2px solid white"
           rounded={5}
         >

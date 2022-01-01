@@ -200,6 +200,18 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
     setMoveCount(temp);
   };
 
+  const endTurn = () => {
+    //find current player in playOrder
+    // const currentIndex = ctx.playOrder.findIndex(
+    //   (pod) => ctx.currentPlayer === pod
+    // );
+    // let nextIndex = currentIndex + 1;
+    // if ((nextIndex = ctx.playOrder.length)) {
+    //   nextIndex = 0;
+    // }
+    moves.endTurn();
+  };
+
   const setStage = (stageId: number) => {
     setCurrentStage(stageId);
   };
@@ -231,6 +243,47 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
     console.log(Stages[currentStage]);
     switch (currentStage) {
       case 0:
+        //check if diceRolled is double or not
+        let currentPlayerInInt = parseInt(ctx.currentPlayer);
+        console.log(
+          `%c---------------------------`,
+          "background: #292d3e; color: #f07178; font-weight: bold"
+        );
+        console.log(
+          G.diceRolled[currentPlayerInInt][0],
+          G.diceRolled[currentPlayerInInt][1]
+        );
+        console.log(
+          `%c---------------------------`,
+          "background: #292d3e; color: #f07178; font-weight: bold"
+        );
+        if (
+          G.diceRolled[currentPlayerInInt][0] ===
+            G.diceRolled[currentPlayerInInt][1] &&
+          G.diceRolled[currentPlayerInInt] !== [0, 0]
+        ) {
+          //do something i dun know
+        }
+        //else end turn
+        else {
+          console.log(
+            `%c---------------------------`,
+            "background: #292d3e; color: #f07178; font-weight: bold"
+          );
+          console.log(
+            G.diceRolled[currentPlayerInInt][0],
+            G.diceRolled[currentPlayerInInt][1]
+          );
+          console.log(
+            `%c---------------------------`,
+            "background: #292d3e; color: #f07178; font-weight: bold"
+          );
+          console.log(
+            `%cEnd turn`,
+            "background: #292d3e; color: #f07178; font-weight: bold"
+          );
+          endTurn();
+        }
         //dice move => enable roll button
         setIsRollAble(true);
         //disable other
@@ -486,6 +539,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
               isRollAble={isRollAble}
               incMoveCount={incMoveCount}
               moveCount={moveCount}
+              isCurrentPlayer={isCurrentPlayer}
             ></Rolling>
             <Flex
               flexDir="row"
@@ -553,6 +607,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
                   setStage={setStage}
                   moveCount={moveCount}
                   incMoveCount={incMoveCount}
+                  endTurn={endTurn}
                 />
               </Popover>
             </Flex>

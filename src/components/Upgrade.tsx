@@ -24,6 +24,7 @@ interface UpgradeProps {
   setStage: (s: number) => void;
   incMoveCount: () => void;
   moveCount: number;
+  endTurn: () => void;
 }
 export const Upgrade = ({
   G,
@@ -32,12 +33,23 @@ export const Upgrade = ({
   setStage,
   incMoveCount,
   moveCount,
+  endTurn,
 }: UpgradeProps) => {
   //TODO: select a level to upgrade
   const upgradeHandler = () => {
     moves.upgradeBuilding();
     incMoveCount();
+    //check if previous dice rolled is double or not
     setStage(0);
+    if (G.diceRolled[0] === G.diceRolled[1]) {
+      //else end turn
+    } else {
+      console.log(
+        `%cEnd turn`,
+        "background: #292d3e; color: #f07178; font-weight: bold"
+      );
+      // endTurn();
+    }
   };
   const [upgradePrice, setUpgradePrice] = useState<number | null>(null);
   useEffect(() => {
