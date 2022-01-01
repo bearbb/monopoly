@@ -23,6 +23,7 @@ import token3 from "src/assets/PlayerToken/3.png";
 
 //lobby
 import { lobbyClient } from "src/utils/utilities";
+import { useNavigate } from "react-router";
 
 const Body = (props: FlexProps) => (
   <Flex
@@ -36,7 +37,7 @@ const Body = (props: FlexProps) => (
   ></Flex>
 );
 
-interface PlayerData {
+export interface PlayerData {
   id: number;
   name: string | undefined;
 }
@@ -46,6 +47,7 @@ export const Lobby = () => {
   const [isError, setIsError] = useState<boolean>(false);
   const { userData, setUserData } = useUserContext();
   const [isAllReady, setIsAllReady] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(
@@ -55,7 +57,6 @@ export const Lobby = () => {
     return () => {};
   }, []);
 
-  //FIXME: data fetch after join lobby not going right
   const getLobbyData = async () => {
     try {
       const { players } = await lobbyClient.getMatch(
@@ -71,6 +72,10 @@ export const Lobby = () => {
       setIsError(true);
     }
   };
+  useEffect(() => {
+    console.log(playersData);
+    return () => {};
+  }, [playersData]);
 
   //function on click the button: 2 way
   //call getLobbyData if isAllReady = false
@@ -80,29 +85,40 @@ export const Lobby = () => {
     if (!isAllReady) {
       getLobbyData();
     } else {
-      //TODO: navigate to game
+      // TODO: navigate to game
+      navigateToGame();
     }
   };
 
+  //init function
   useEffect(() => {
-    console.log(userData.lobbyId);
+    // console.log(userData.lobbyId);
     getLobbyData();
     return () => {};
   }, []);
+
+  //check is ready status
   useEffect(() => {
-    //check if all player join
-    console.log(playersData);
-    if (
-      playersData.every((p) => p.name !== undefined) &&
-      playersData.length === 4
-    ) {
-      console.log("checked");
-      setIsAllReady(true);
-    } else {
-      console.log("not ready");
-    }
+    //check if all slot have join
+    //by check all object have name !== undefined
+    let isReady = playersData.every((player) => player.name !== undefined);
+    setIsAllReady(isReady);
     return () => {};
   }, [playersData]);
+
+  const navigateToGame = () => {
+    //check if all userData meet requirements
+    let allMeet = true;
+    let key: keyof typeof userData;
+    for (key in userData) {
+      if (userData[key] === "") {
+        allMeet = false;
+      }
+    }
+    if (allMeet) {
+      navigate("/game");
+    }
+  };
   return (
     <Body id="Lobby" minH={835}>
       <Heading as="h1" m="50" size="2xl">

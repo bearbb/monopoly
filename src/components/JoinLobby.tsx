@@ -56,6 +56,7 @@ export const JoinLobby = () => {
           "default",
           lobbyId
         );
+        console.log(matchID, players);
         let playerIndexAvail = -1;
         //check players arr if any slot left
         for (let i = 0; i < players.length; i++) {
@@ -80,7 +81,7 @@ export const JoinLobby = () => {
           setAlert("u r already joined");
         } else {
           //join lobby with that id and username
-          const playerCredential = await lobbyClient.joinMatch(
+          const { playerCredentials } = await lobbyClient.joinMatch(
             "default",
             lobbyId,
             {
@@ -88,10 +89,16 @@ export const JoinLobby = () => {
               playerName: userData.username,
             }
           );
-          let temp = { ...userData, lobbyId: lobbyId };
+          let temp = {
+            ...userData,
+            lobbyId: lobbyId,
+            credentials: playerCredentials,
+            playerId: playerIndexAvail.toString(),
+          };
           setUserData(temp);
+          localStorage.setItem("playerId", playerIndexAvail.toString());
           localStorage.setItem("lobbyId", lobbyId);
-          console.log(playerCredential);
+          localStorage.setItem("credentials", playerCredentials);
           navigate("/lobby");
         }
       } catch (error) {

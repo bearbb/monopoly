@@ -7,7 +7,7 @@ import token2 from "src/assets/PlayerToken/2.png";
 import token3 from "src/assets/PlayerToken/3.png";
 
 //chakra components
-import { Flex, Image } from "@chakra-ui/react";
+import { Flex, Image, Icon, createIcon } from "@chakra-ui/react";
 import { CenteredFlex } from "src/Board";
 
 interface PlayerProps {
@@ -29,7 +29,7 @@ export const Player = ({ tokenId }: PlayerProps) => {
   };
   return (
     <CenteredFlex>
-      <Image src={tokenSelector()} w={25} opacity={0.9}></Image>
+      <Image src={tokenSelector()} w={25} opacity={0.95}></Image>
     </CenteredFlex>
   );
 };

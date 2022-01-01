@@ -5,6 +5,7 @@ export interface UserContextData {
     username: string;
     lobbyId: string;
     credentials: string;
+    playerId: string;
   };
   setUserData: (data: UserContextData["userData"]) => void;
 }
@@ -14,6 +15,7 @@ export const UserContext = createContext<UserContextData>({
     username: "",
     lobbyId: "",
     credentials: "",
+    playerId: "",
   },
   setUserData: () => {},
 });

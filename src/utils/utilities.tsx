@@ -3,8 +3,8 @@ import { priceMultiplier } from "src/data/priceMultiplier";
 import { urlData } from "src/data/urlData";
 //find current block where user pos is
 export const findCurrentBlock = (
-  playerPositions: Array<number[]>,
-  userId: number
+  playerPositions: Array<string[]>,
+  userId: string
 ): number => {
   for (let i = 0; i < playerPositions.length; i++) {
     if (playerPositions[i].includes(userId)) {
@@ -120,3 +120,5 @@ export const bankruptList = (playerMoney: number[], blockOwners: number[]) => {
 };
 
 export const lobbyClient = new LobbyClient({ server: urlData.serverURI });
+
+//check purchase able ??

@@ -33,23 +33,8 @@ export const Menu = () => {
   const navigate = useNavigate();
   const { userData, setUserData } = useUserContext();
   const createLobbyHandler = async () => {
-    const matchId = await createLobby();
-    if (matchId !== null) {
-      let temp = userData;
-      temp.lobbyId = matchId;
-      setUserData({ ...temp });
-      localStorage.setItem("lobbyId", matchId);
-      const { playerCredentials } = await lobbyClient.joinMatch(
-        "default",
-        matchId,
-        { playerID: "0", playerName: userData.username }
-      );
-      temp.credentials = playerCredentials;
-      setUserData({ ...temp });
-      localStorage.setItem("credentials", playerCredentials);
-      console.log(playerCredentials);
-      navigate("/lobby");
-    }
+    navigate("/create-lobby");
+    // }
   };
   return (
     <Flex

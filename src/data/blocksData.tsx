@@ -5,7 +5,7 @@ export const blocksData: blockData[] = [
     specialName: "GO",
     isOwned: false,
     buildingLevel: -1,
-    // basePrice: 0,
+    basePrice: 0,
   },
   {
     // cityName: "Buôn Ma Thuột",
@@ -70,7 +70,7 @@ export const blocksData: blockData[] = [
     type: "SPECIAL",
     isOwned: false,
     buildingLevel: -1,
-    // basePrice: 0,
+    basePrice: 0,
   },
   {
     cityName: "Quảng Ninh",
@@ -102,7 +102,7 @@ export const blocksData: blockData[] = [
     type: "FEATURE",
     isOwned: false,
     buildingLevel: -1,
-    // basePrice: 0,
+    basePrice: 0,
   },
   {
     cityName: "Quảng Bình",
@@ -134,6 +134,7 @@ export const blocksData: blockData[] = [
     type: "SPECIAL",
     isOwned: false,
     buildingLevel: -1,
+    basePrice: 0,
   },
   {
     cityName: "Huế",
@@ -165,6 +166,7 @@ export const blocksData: blockData[] = [
     type: "FEATURE",
     isOwned: false,
     buildingLevel: -1,
+    basePrice: 0,
   },
   {
     cityName: "Phú Quốc",
@@ -197,6 +199,7 @@ export const blocksData: blockData[] = [
     type: "SPECIAL",
     isOwned: false,
     buildingLevel: -1,
+    basePrice: 0,
   },
   {
     cityName: "Cao Bằng",
@@ -228,6 +231,7 @@ export const blocksData: blockData[] = [
     type: "FEATURE",
     isOwned: false,
     buildingLevel: -1,
+    basePrice: 0,
   },
   {
     cityName: "Gia Lai",
@@ -261,5 +265,5 @@ export interface blockData {
   type: String;
   isOwned: boolean;
   buildingLevel: number;
-  basePrice?: number;
+  basePrice: number;
 }

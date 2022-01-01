@@ -20,67 +20,27 @@ export interface MonopolyState {
   playerId: number[];
   rollCount: number[];
   diceRolled: number[][];
+  rentPrice: number[];
 }
 export const monopoly: Game<MonopolyState> = {
   // create a board with 31 blocks
-  setup: () => ({
-    playerPositions: Array(31).fill([]),
-    playerMoney: Array(4).fill(8000000),
+  setup: (ctx: any) => ({
+    playerPositions: Array(32).fill([]),
+    playerMoney: Array(ctx.playOrder.length).fill(8000000),
     blocksData,
-    blockOwners: Array(31).fill(null),
+    blockOwners: Array(32).fill(null),
     playerId: [0, 1, 2, 3],
     rollCount: Array(4).fill(0),
     diceRolled: Array(4).fill([0, 0]),
+    rentPrice: Array(32).fill(null),
   }),
 
   turn: {
     minMoves: 1,
-    maxMoves: 3,
     onEnd: (G: any, ctx: any) => {
       G.diceRolled[ctx.currentPlayer] = [0, 0];
     },
-    onBegin: (G: any, ctx: any) => {
-      ctx.events.setActivePlayers({
-        currentPlayer: "diceMove",
-        maxMoves: 1,
-        minMoves: 0,
-      });
-    },
-    //TODO: auto end turn if there is no more move can make
-    //end turn if there is no state
-    stages: {
-      diceMove: {
-        // start: true,
-        moves: {
-          diceMove,
-        },
-        // next: "sell",
-      },
-      specialMove: {
-        moves: {
-          airportMove,
-          cheatMove,
-        },
-        // next: "sell",
-      },
-      sell: {
-        moves: {
-          sellAsset,
-        },
-        // next: "purchase",
-      },
-      purchase: {
-        moves: {
-          purchaseCity,
-          repurchaseCity,
-          upgradeBuilding,
-        },
-        // next: "specialMove",
-      },
-    },
   },
-
-  phases: {},
   moves: {
     diceMove,
     cheatMove,

@@ -2,6 +2,7 @@ import React, { Component, useContext, useEffect, useState } from "react";
 import { blockData } from "src/data/blocksData";
 import { BoardProps } from "boardgame.io/react";
 import { MonopolyState } from "src/game";
+import { isUpgradeAble as isUpAble } from "src/moves/upgradeBuilding";
 import {
   ChakraProvider,
   extendTheme,
@@ -12,12 +13,22 @@ import {
   FlexProps,
   Image,
   Text,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
   Button,
 } from "@chakra-ui/react";
 
 //components
 import { Player } from "src/components/Player";
-import { Die } from "src/components/Die";
+import { Purchase } from "src/components/Purchase";
+import { Upgrade } from "./components/Upgrade";
 
 //board data
 import { blocksData } from "src/data/blocksData";
@@ -29,6 +40,9 @@ import fifaImg from "src/assets/BoardImg/fifa.png";
 import de_airportImg from "src/assets/BoardImg/de_airport.png";
 import chancesImg from "src/assets/BoardImg/drawCard.png";
 import { Rolling } from "./components/Rolling";
+import { useUserContext } from "./contexts/UserContext";
+import { priceMultiplier } from "./data/priceMultiplier";
+import { PlayerMoney } from "./components/PlayerMoney";
 
 const MoneyBGColor = "gray.50";
 const MonopolyColorTheme = {
@@ -89,17 +103,17 @@ const FirstHalfBlock = (blockId: number, monoThemeColor: string) => {
 };
 function kFormatter(num: number) {
   return Math.abs(num) > 999
-    ? Math.sign(num) * (Math.abs(num) / 1000) + "K"
+    ? (Math.sign(num) * (Math.abs(num) / 1000)).toFixed(1) + "K"
     : Math.sign(num) * Math.abs(num);
 }
-const SecondHalfBlock = (blockId: number) => {
-  let rentPrice = blocksData[blockId].basePrice;
+const SecondHalfBlock = (blockId: number, rentPriceList: number[]) => {
+  let rentPrice = rentPriceList[blockId];
   if (rentPrice !== undefined) {
     let rentPriceInK = kFormatter(rentPrice);
     return (
       <Flex {...secondHalfBlockStyle}>
         <Text fontSize="sm" fontWeight="extrabold" color="gray.800">
-          {rentPriceInK}
+          {rentPriceInK !== 0 ? rentPriceInK : null}
         </Text>
       </Flex>
     );
@@ -137,7 +151,122 @@ const OverlayBlock = (blockId: number, playerPos: any[][]) => {
 };
 
 const GridItemStyle: GridItemProps = {};
+
+const Stages = ["diceMove", "sell", "purchase", "upgrade"];
+
+const getRentPrice = (
+  blockOwners: (number | null)[],
+  blocksData: blockData[]
+): number[] => {
+  //loop through blockOwners arr and check which one is owned
+  let temp: number[] = Array(32).fill(null);
+  for (let i = 0; i < blockOwners.length; i++) {
+    const element = blockOwners[i];
+    if (element !== null) {
+      let price =
+        blocksData[i].basePrice *
+        blocksData[i].buildingLevel *
+        priceMultiplier.rent;
+      temp[i] = price;
+    }
+  }
+  return temp;
+};
+
+const getBuildingLevel = (
+  blocksData: MonopolyState["blocksData"]
+): number[] => {
+  let temp = Array(32).fill(null);
+  //loop through blocksData and get its building level
+  temp = blocksData.map((bdt) => bdt.buildingLevel);
+  return temp;
+};
+
 export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
+  const { userData, setUserData } = useUserContext();
+  const [currentStage, setCurrentStage] = useState<number>(0);
+  const [isRollAble, setIsRollAble] = useState<boolean>(false);
+  const [isPurchaseAble, setIsPurchaseAble] = useState<boolean>(false);
+  const [isUpgradeAble, setIsUpgradeAble] = useState<boolean>(false);
+  const [isSellAble, setIsSellAble] = useState<boolean>(false);
+  const [rentPrice, setRentPrice] = useState<number[]>(Array(32).fill(null));
+  const [buildingLevel, setBuildingLevel] = useState<number[]>(
+    Array(32).fill(null)
+  );
+  const [isCurrentPlayer, setIsCurrentPlayer] = useState<boolean>(false);
+  const [moveCount, setMoveCount] = useState<number>(0);
+  const incMoveCount = () => {
+    let temp = moveCount + 1;
+    setMoveCount(temp);
+  };
+
+  const setStage = (stageId: number) => {
+    setCurrentStage(stageId);
+  };
+  const nextStage = () => {
+    let currentS = currentStage;
+    currentS++;
+    setCurrentStage(currentS);
+  };
+  //check if this player is the current turn
+  useEffect(() => {
+    if (ctx.currentPlayer === userData.playerId) {
+      setIsCurrentPlayer(true);
+    } else {
+      setIsCurrentPlayer(false);
+    }
+    return () => {};
+  }, [ctx.currentPlayer]);
+
+  //update rentPrice and building level each move
+  useEffect(() => {
+    let temp = getRentPrice(G.blockOwners, G.blocksData);
+    setRentPrice(temp);
+    let temp1 = getBuildingLevel(G.blocksData);
+    setBuildingLevel(temp1);
+    return () => {};
+  }, [G.playerPositions, G.blockOwners, G.blocksData]);
+
+  useEffect(() => {
+    console.log(Stages[currentStage]);
+    switch (currentStage) {
+      case 0:
+        //dice move => enable roll button
+        setIsRollAble(true);
+        //disable other
+        setIsUpgradeAble(false);
+        setIsPurchaseAble(false);
+        break;
+      case 1:
+        //sell => enable sell
+        setIsSellAble(true);
+        //disable other
+        setIsRollAble(false);
+        setIsPurchaseAble(false);
+        setIsUpgradeAble(false);
+        break;
+      case 2:
+        //purchase => enable purchase
+        setIsPurchaseAble(true);
+        //disable other
+        setIsRollAble(false);
+        setIsSellAble(false);
+        setIsUpgradeAble(false);
+        break;
+      case 3:
+        //upgrade => enable upgrade
+        setIsUpgradeAble(true);
+        //disable other
+        setIsRollAble(false);
+        setIsSellAble(false);
+        setIsPurchaseAble(false);
+        break;
+      default:
+        break;
+    }
+    return () => {};
+  }, [currentStage]);
+
   const BlockFull = (
     blockId: number,
     monoThemeColor: string,
@@ -146,18 +275,23 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
     return (
       <Flex {...blockContentContainerStyle}>
         {FirstHalfBlock(blockId, monoThemeColor)}
-        {SecondHalfBlock(blockId)}
+        {SecondHalfBlock(blockId, rentPrice)}
         {OverlayBlock(blockId, playerPos)}
       </Flex>
     );
   };
-  const [playerPos, setPlayerPos] = useState<number[][]>(Array(32).fill([]));
-  useEffect(() => {
-    console.log(G.playerPositions);
-    return () => {};
-  }, [G.playerPositions]);
   return (
-    <Flex w="100vw" h="100vh" justifyContent="center" alignItems="center">
+    <Flex
+      w="100vw"
+      h="100vh"
+      justifyContent="center"
+      alignItems="center"
+      bgGradient="linear(to-tr, purple.300,  pink.200, yellow.400)"
+    >
+      <PlayerMoney
+        playerMoney={G.playerMoney}
+        currentPlayer={ctx.currentPlayer}
+      />
       <Grid
         templateColumns="repeat(9, minmax(0, 1fr))"
         templateRows="repeat(9, minmax(0, 1fr))"
@@ -168,11 +302,13 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
         borderColor="gray.400"
         rounded={5}
         p={1.5}
+        bg="gray.50"
       >
         {/* GO block */}
         <GridItem {...BlockStyle} id="block0" gridArea="9/9">
           <CenteredFlex>
             <Image src={goImg} w="50%"></Image>
+            {OverlayBlock(0, G.playerPositions)}
           </CenteredFlex>
         </GridItem>
         {/* GO block */}
@@ -207,6 +343,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
         <GridItem {...BlockStyle} id="block8" gridArea="9/1" bg="gray.100">
           <Flex w="100%" h="100%" justifyContent="center" alignItems="center">
             <Image src={prisonImg} w="50%"></Image>
+            {OverlayBlock(8, G.playerPositions)}
           </Flex>
         </GridItem>
         {/* Prison block */}
@@ -229,6 +366,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
         >
           <CenteredFlex>
             <Image src={chancesImg} w="50%"></Image>
+            {OverlayBlock(12, G.playerPositions)}
           </CenteredFlex>
         </GridItem>
         <GridItem {...BlockStyle} id="block13" gridArea="4/1" bg={MoneyBGColor}>
@@ -248,6 +386,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
         <GridItem {...BlockStyle} id="block16" gridArea="1/1" bg="gray.100">
           <CenteredFlex>
             <Image src={fifaImg} w="50%"></Image>
+            {OverlayBlock(16, G.playerPositions)}
           </CenteredFlex>
         </GridItem>
         {/* Fifa block  */}
@@ -272,6 +411,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
         >
           <CenteredFlex>
             <Image src={chancesImg} w="50%"></Image>
+            {OverlayBlock(20, G.playerPositions)}
           </CenteredFlex>
         </GridItem>
         <GridItem {...BlockStyle} id="block21" gridArea="1/6" bg={MoneyBGColor}>
@@ -289,6 +429,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
         <GridItem {...BlockStyle} id="block24" gridArea="1/9" bg="gray.100">
           <CenteredFlex>
             <Image w="50%" src={de_airportImg}></Image>
+            {OverlayBlock(24, G.playerPositions)}
           </CenteredFlex>
         </GridItem>
         {/* de_airport block */}
@@ -310,6 +451,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
           bg={MonopolyColorTheme.chances}
         >
           <CenteredFlex>
+            {OverlayBlock(28, G.playerPositions)}
             <Image src={chancesImg} w="50%"></Image>
           </CenteredFlex>
         </GridItem>
@@ -327,17 +469,98 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
         {/* middle board */}
         <GridItem
           gridArea="2/2/9/9"
-          bg="purple.200"
+          bg="purple.300"
+          // bgGradient="linear(to-tr, purple.200, yellow.200)"
           borderWidth={7}
           rounded={5}
           borderColor="gray.300"
         >
           {/* <RollDice G={G} ctx={ctx} moves={moves}></RollDice> */}
-          <CenteredFlex id="diceRollContainer" gap={10}>
-            <Rolling G={G} ctx={ctx} moves={moves}></Rolling>
+          <CenteredFlex id="diceRollContainer" gap={10} flexDirection="column">
+            <Rolling
+              G={G}
+              ctx={ctx}
+              moves={moves}
+              nextStage={nextStage}
+              setStage={setStage}
+              isRollAble={isRollAble}
+              incMoveCount={incMoveCount}
+              moveCount={moveCount}
+            ></Rolling>
+            <Flex
+              flexDir="row"
+              gap={7}
+              w="100%"
+              h="40%"
+              justifyContent="center"
+            >
+              {/* Purchase stuff */}
+              <Popover
+                isOpen={isPurchaseAble}
+                onClose={() => {
+                  setIsPurchaseAble(false);
+                  // check if upgrade able
+                  if (isUpAble(G, ctx)) {
+                    console.log("is up able");
+                    setStage(3);
+                  } else {
+                    console.log("not up able");
+                    setStage(0);
+                  }
+                }}
+              >
+                <PopoverTrigger>
+                  <Button
+                    colorScheme="blue"
+                    disabled={!isPurchaseAble}
+                    borderWidth={2}
+                    borderColor="white"
+                  >
+                    purchase
+                  </Button>
+                </PopoverTrigger>
+                <Purchase
+                  G={G}
+                  ctx={ctx}
+                  moves={moves}
+                  setStage={setStage}
+                  incMoveCount={incMoveCount}
+                  moveCount={moveCount}
+                />
+              </Popover>
+              {/* Upgrade stuff */}
+              <Popover
+                isOpen={isUpgradeAble}
+                onClose={() => {
+                  setIsUpgradeAble(false);
+                  setStage(0);
+                }}
+              >
+                <PopoverTrigger>
+                  <Button
+                    colorScheme="purple"
+                    disabled={!isUpgradeAble}
+                    borderWidth={2}
+                    borderColor="white"
+                  >
+                    upgrade
+                  </Button>
+                </PopoverTrigger>
+                <Upgrade
+                  G={G}
+                  ctx={ctx}
+                  moves={moves}
+                  setStage={setStage}
+                  moveCount={moveCount}
+                  incMoveCount={incMoveCount}
+                />
+              </Popover>
+            </Flex>
           </CenteredFlex>
         </GridItem>
       </Grid>
     </Flex>
   );
 };
+
+// <i className="fas fa-home fa-2x" style={{ color: "#718096" }}></i>

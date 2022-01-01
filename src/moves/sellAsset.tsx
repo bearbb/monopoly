@@ -15,6 +15,12 @@ export const sellAsset = (G: any, ctx: any, blockId: number) => {
   }
 };
 
+export const sellAssets = (G: any, ctx: any, blockIdList: number[]) => {
+  blockIdList.forEach((blockId) => {
+    sellAsset(G, ctx, blockId);
+  });
+};
+
 export const listAsset = (G: any, ctx: any): number[] => {
   //find all asset own by this player
   let blocks: number[] = [];

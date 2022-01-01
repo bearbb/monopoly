@@ -41,14 +41,14 @@ export const diceMove = (G: any, ctx: any, d1: number, d2: number) => {
   G.playerPositions[incomingPos].push(userId);
   console.log(`Current position is in ${G.blocksData[incomingPos].cityName}`);
   //check if current pos have to pay rent or not?
-  if (isHaveToPayRent(G, ctx)) {
-    payRent(G, ctx);
-  } else {
-    //this block could be not owned or owned by this player
-  }
+  // if (isHaveToPayRent(G, ctx)) {
+  //   payRent(G, ctx);
+  // } else {
+  //   //this block could be not owned or owned by this player
+  // }
   //TODO: If player rolled double mean 2 dices with the same number => one more turn
 
   //TODO: If player have rolled 3 time continuously, that player go to prison which block index is 8
   //Move to next stage
-  ctx.events.setActivePlayers({ currentPlayer: "purchase", maxMoves: 1 });
+  // ctx.events.setActivePlayers({ currentPlayer: "sell", maxMoves: 1 });
 };

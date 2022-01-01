@@ -35,14 +35,17 @@ const getInitUserData = (): {
   username: string;
   lobbyId: string;
   credentials: string;
+  playerId: string;
 } => {
   let username = localStorage.getItem("username");
   let lobbyId = localStorage.getItem("lobbyId");
   let credentials = localStorage.getItem("credentials");
+  let playerId = localStorage.getItem("playerId");
   let userData = {
     username: "",
     lobbyId: "",
     credentials: "",
+    playerId: "",
   };
   if (username !== null) {
     userData.username = username;
@@ -53,6 +56,9 @@ const getInitUserData = (): {
   if (credentials !== null) {
     userData.credentials = credentials;
   }
+  if (playerId !== null) {
+    userData.playerId = playerId;
+  }
   return userData;
 };
 
@@ -61,6 +67,7 @@ export const App = () => {
     username: getInitUserData().username,
     lobbyId: getInitUserData().lobbyId,
     credentials: getInitUserData().credentials,
+    playerId: getInitUserData().playerId,
   });
   useEffect(() => {
     return () => {};
@@ -86,7 +93,7 @@ export const App = () => {
         <Routes>
           <Route path="create-player" element={<CreatePlayer />}></Route>
           <Route path="/" element={<Menu />}></Route>
-          {/* <Route path="create-lobby" element={<CreateLobby />}></Route> */}
+          <Route path="create-lobby" element={<CreateLobby />}></Route>
           <Route path="join-lobby" element={<JoinLobby />}></Route>
           <Route path="lobby" element={<Lobby />}></Route>
           <Route
@@ -94,7 +101,7 @@ export const App = () => {
             element={
               <Client
                 matchID={`${userData.lobbyId}`}
-                playerID="0"
+                playerID={userData.playerId}
                 credentials={userData.credentials}
               />
             }
