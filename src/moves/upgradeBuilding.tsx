@@ -4,14 +4,14 @@ import { INVALID_MOVE } from "boardgame.io/core";
 export const isUpgradeAble = (G: any, ctx: any): boolean => {
   //find current block
   const currentPos = findCurrentBlock(G.playerPositions, ctx.currentPlayer);
-  console.log(
-    `%cCurrent pos is: ${currentPos}`,
-    "background: #292d3e; color: #f07178; font-weight: bold"
-  );
+  // console.log(
+  //   `%cCurrent pos is: ${currentPos}`,
+  //   "background: #292d3e; color: #f07178; font-weight: bold"
+  // );
   //check if this block is this player's asset
   // console.log(G.blocksData[currentPos].type);
   if (currentPos !== -1 && G.blocksData[currentPos].type === "CITY") {
-    console.log(G.blockOwners);
+    // console.log(G.blockOwners);
     if (G.blockOwners[currentPos] === ctx.currentPlayer) {
       let priceToUpgrade =
         G.blocksData[currentPos].basePrice * priceMultiplier.upgradeBuilding;
@@ -53,10 +53,10 @@ export const upgradeBuilding = (G: any, ctx: any) => {
       G.playerMoney[ctx.currentPlayer] -= priceToUpgrade;
       //Update building level
       G.blocksData[currentPos].buildingLevel += 1;
-      console.log(
-        `%cPlayer ${ctx.currentPlayer} have upgrade block ${currentPos} to level ${G.blocksData[currentPos].buildingLevel}`,
-        "background: #292d3e; color: #f07178; font-weight: bold"
-      );
+      // console.log(
+      //   `%cPlayer ${ctx.currentPlayer} have upgrade block ${currentPos} to level ${G.blocksData[currentPos].buildingLevel}`,
+      //   "background: #292d3e; color: #f07178; font-weight: bold"
+      // );
     } else {
       return INVALID_MOVE;
     }

@@ -1,7 +1,7 @@
 import { findCurrentBlock } from "src/utils/utilities";
 import { priceMultiplier } from "src/data/priceMultiplier";
 export const isHaveToPayRent = (G: any, ctx: any) => {
-  console.log(G.playerPositions, ctx.currentPlayer);
+  // console.log(G.playerPositions, ctx.currentPlayer);
   //find current block
   const currentPos = findCurrentBlock(
     G.playerPositions,
@@ -99,4 +99,32 @@ export const isHaveEnoughMoneyToPayRent = (G: any, ctx: any): boolean => {
   } else {
     return false;
   }
+};
+
+export const moneyHaveToPay = (
+  G: any,
+  ctx: any
+): { p0: any; p1: any; money: number } => {
+  //find current block
+  const currentPos = findCurrentBlock(G.playerPositions, ctx.currentPlayer);
+  const blockData = G.blocksData[currentPos];
+  let returnData = {
+    p1: "",
+    p0: "",
+    money: -1,
+  };
+  if (currentPos !== -1) {
+    //check if current pos block is owned and own by other player
+    if (
+      G.blockOwners[currentPos] !== null &&
+      G.blockOwners[currentPos] !== ctx.currentPlayer
+    ) {
+      returnData.p0 = ctx.currentPlayer;
+      returnData.p1 = G.blockOwners[currentPos];
+      returnData.money = Math.round(
+        blockData.basePrice * blockData.buildingLevel * priceMultiplier.rent
+      );
+    }
+  }
+  return returnData;
 };

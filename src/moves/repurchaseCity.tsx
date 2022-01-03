@@ -8,7 +8,7 @@ export const repurchaseCity = (G: any, ctx: any) => {
   //check if this block is owned
   if (blockData.isOwned) {
     //check if this block type is CITY
-    if (blockData.type === "CITY" && blockData.buildingLevel < 5) {
+    if (blockData.type === "CITY" && blockData.buildingLevel < 4) {
       const blockOwner = G.blockOwners[currentPos];
       const repurchasePrice =
         blockData.basePrice *

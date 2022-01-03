@@ -12,14 +12,14 @@ export const diceMove = (G: any, ctx: any, d1: number, d2: number) => {
   const userId = ctx.currentPlayer;
   //roll dices
   const diceValue = { firstDice: d1, secondDice: d2 };
-  console.log(diceValue);
+  // console.log(diceValue);
   G.diceRolled[ctx.currentPlayer] = [diceValue.firstDice, diceValue.secondDice];
-  console.log(
-    "Dice value rolled is: " +
-      diceValue.firstDice +
-      " and " +
-      diceValue.secondDice
-  );
+  // console.log(
+  //   "Dice value rolled is: " +
+  //     diceValue.firstDice +
+  //     " and " +
+  //     diceValue.secondDice
+  // );
   //clear the user id from current block
   //find the current block first
   const currentPos = findCurrentBlock(G.playerPositions, userId);
@@ -39,7 +39,7 @@ export const diceMove = (G: any, ctx: any, d1: number, d2: number) => {
   }
   //add userId to new block pos
   G.playerPositions[incomingPos].push(userId);
-  console.log(`Current position is in ${G.blocksData[incomingPos].cityName}`);
+  // console.log(`Current position is in ${G.blocksData[incomingPos].cityName}`);
   //check if current pos have to pay rent or not?
   // if (isHaveToPayRent(G, ctx)) {
   //   payRent(G, ctx);
@@ -51,4 +51,23 @@ export const diceMove = (G: any, ctx: any, d1: number, d2: number) => {
   //TODO: If player have rolled 3 time continuously, that player go to prison which block index is 8
   //Move to next stage
   // ctx.events.setActivePlayers({ currentPlayer: "sell", maxMoves: 1 });
+};
+
+export const toPrison = (G: any, ctx: any) => {
+  const userId = ctx.currentPlayer;
+  let incomingPos: number = 8;
+  //clear the user id from current block
+  //find the current block first
+  const currentPos = findCurrentBlock(G.playerPositions, userId);
+  if (currentPos !== -1) {
+    //remove userId from current block
+    G.playerPositions[currentPos] = G.playerPositions[currentPos].filter(
+      (id: number) => id !== userId
+    );
+  }
+  //add userId to new block pos
+  G.playerPositions[incomingPos].push(userId);
+  // console.log(
+  //   `Current position is in ${G.blocksData[incomingPos].specialName}`
+  // );
 };

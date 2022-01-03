@@ -74,7 +74,7 @@ export const App = () => {
   }, []);
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(userData);
+    // console.log(userData);
     return () => {};
   }, [userData]);
   useEffect(() => {

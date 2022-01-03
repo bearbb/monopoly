@@ -12,6 +12,7 @@ export const Client = BoardGameClient({
   numPlayers: 4,
   board: Board,
   multiplayer: SocketIO({ server: "localhost:8000" }),
+  debug: false,
 });
 
 export default Client;

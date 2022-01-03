@@ -20,7 +20,7 @@ export const cheatMove = (G: any, ctx: any, blockIdToTeleTo: number) => {
     `Current position is in ${G.blocksData[incomingPos].cityName} in block ${incomingPos}`
   );
   if (isHaveToPayRent(G, ctx)) {
-    payRent(G, ctx);
+    // payRent(G, ctx);
   } else {
     //this block could be not owned or owned by this player
   }

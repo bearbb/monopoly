@@ -4,19 +4,17 @@ import {
   Badge,
   Flex,
   Button,
-  Popover,
-  PopoverTrigger,
   PopoverContent,
   PopoverHeader,
   PopoverBody,
-  PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
-  PopoverAnchor,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { isUpgradeAble } from "src/moves/upgradeBuilding";
 import { findCurrentBlock, getBlockPrice } from "src/utils/utilities";
+import { isOwnedLevel4Building } from "src/moves/purchaseCity";
 
 interface PurchaseProps {
   G: any;
@@ -35,9 +33,21 @@ export const Purchase = ({
   moveCount,
 }: PurchaseProps) => {
   const [isJustPurchase, setIsJustPurchase] = useState<boolean>(false);
+  const toast = useToast();
   const purchaseHandler = () => {
-    moves.purchaseCity();
+    if (!isRepurchase) {
+      moves.purchaseCity();
+    } else {
+      moves.repurchaseCity();
+      toast({
+        title: "repurchase",
+        description: `player ${ctx.currentPlayer} have repurchased this city`,
+        duration: 3000,
+        status: "success",
+      });
+    }
     setIsJustPurchase(true);
+    setIsRepurchase(false);
     incMoveCount();
     //check if upAble
   };
@@ -58,18 +68,34 @@ export const Purchase = ({
   const [blockPrice, setBlockPrice] = useState<number | null>(null);
   useEffect(() => {
     const blockId = findCurrentBlock(G.playerPositions, ctx.currentPlayer);
+    //check if this block is owned by other one
     if (blockId !== -1) {
       const price = getBlockPrice(G.blocksData, G.blockOwners, blockId);
       setBlockPrice(price.blockPrice);
+      if (
+        !isOwnedLevel4Building(G, ctx) &&
+        ctx.currentPlayer !== G.blockOwners[blockId] &&
+        G.blockOwners[blockId] !== null
+      ) {
+        console.log(
+          `%cSet repurchase`,
+          "background: #292d3e; color: #f07178; font-weight: bold"
+        );
+        setIsRepurchase(true);
+      }
     }
+
     return () => {};
   }, [G.playerPositions]);
+  const [isRepurchase, setIsRepurchase] = useState<boolean>(false);
 
   return (
     <PopoverContent>
       <PopoverArrow></PopoverArrow>
       <PopoverCloseButton />
-      <PopoverHeader fontWeight="bold">Purchasing...</PopoverHeader>
+      <PopoverHeader fontWeight="bold">
+        {isRepurchase ? "!!! Repurchasing... !!!" : "Purchasing..."}
+      </PopoverHeader>
       <PopoverBody>
         <Flex flexDir="column" gap={5}>
           <Flex w="100%" gap={3}>
@@ -82,7 +108,7 @@ export const Purchase = ({
               purchaseHandler();
             }}
           >
-            Purchase
+            {isRepurchase ? "Repurchase" : "Purchase"}
           </Button>
         </Flex>
       </PopoverBody>

@@ -11,12 +11,11 @@ import { Flex, Image, Icon, createIcon } from "@chakra-ui/react";
 import { CenteredFlex } from "src/Board";
 
 interface PlayerProps {
-  tokenId: any;
+  tokenId: number[];
 }
 
 export const Player = ({ tokenId }: PlayerProps) => {
-  tokenId = parseInt(tokenId);
-  const tokenSelector = () => {
+  const tokenSelector = (tokenId: number) => {
     if (tokenId === 0) {
       return token0;
     } else if (tokenId === 1) {
@@ -29,7 +28,9 @@ export const Player = ({ tokenId }: PlayerProps) => {
   };
   return (
     <CenteredFlex>
-      <Image src={tokenSelector()} w={25} opacity={0.95}></Image>
+      {tokenId.map((tid) => {
+        return <Image src={tokenSelector(tid)} w={25} opacity={0.95}></Image>;
+      })}
     </CenteredFlex>
   );
 };

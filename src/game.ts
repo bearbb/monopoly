@@ -52,6 +52,7 @@ export const monopoly: Game<MonopolyState> = {
     upgradeBuilding,
     airportMove,
     sellAsset,
+    payRent,
     setPlayerMoney: (G: any, ctx: any) => {
       G.playerMoney[ctx.currentPlayer] = 0;
     },

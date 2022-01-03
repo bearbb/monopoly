@@ -43,6 +43,7 @@ import { Rolling } from "./components/Rolling";
 import { useUserContext } from "./contexts/UserContext";
 import { priceMultiplier } from "./data/priceMultiplier";
 import { PlayerMoney } from "./components/PlayerMoney";
+import { isOwnedLevel4Building, isOwnedResort } from "./moves/purchaseCity";
 
 const MoneyBGColor = "gray.50";
 const MonopolyColorTheme = {
@@ -120,14 +121,14 @@ const SecondHalfBlock = (blockId: number, rentPriceList: number[]) => {
   }
 };
 
-const OverlayBlock = (blockId: number, playerPos: any[][]) => {
+const OverlayBlock = (blockId: number, playerPos: string[][]) => {
   //check if this block have player or not and which tokenId is it
   // console.log(playerPos);
   if (playerPos !== undefined) {
     let tokenIdList: number[] = [];
     let isExist = false;
     if (playerPos[blockId] !== undefined && playerPos[blockId].length > 0) {
-      tokenIdList = playerPos[blockId];
+      tokenIdList = playerPos[blockId].map((p) => parseInt(p));
       isExist = true;
     }
     // console.log(tokenIdList[0]);
@@ -144,7 +145,7 @@ const OverlayBlock = (blockId: number, playerPos: any[][]) => {
         justifyContent="center"
         alignItems="center"
       >
-        {isExist ? <Player tokenId={tokenIdList[0]}></Player> : null}
+        {isExist ? <Player tokenId={tokenIdList}></Player> : null}
       </Flex>
     );
   }
@@ -193,22 +194,19 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
   const [buildingLevel, setBuildingLevel] = useState<number[]>(
     Array(32).fill(null)
   );
+  const [rollCount, setRollCount] = useState(0);
   const [isCurrentPlayer, setIsCurrentPlayer] = useState<boolean>(false);
   const [moveCount, setMoveCount] = useState<number>(0);
   const incMoveCount = () => {
     let temp = moveCount + 1;
     setMoveCount(temp);
   };
+  const incRollCount = () => {
+    let temp = rollCount + 1;
+    setRollCount(temp);
+  };
 
   const endTurn = () => {
-    //find current player in playOrder
-    // const currentIndex = ctx.playOrder.findIndex(
-    //   (pod) => ctx.currentPlayer === pod
-    // );
-    // let nextIndex = currentIndex + 1;
-    // if ((nextIndex = ctx.playOrder.length)) {
-    //   nextIndex = 0;
-    // }
     moves.endTurn();
   };
 
@@ -240,23 +238,25 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
   }, [G.playerPositions, G.blockOwners, G.blocksData]);
 
   useEffect(() => {
+    if (rollCount >= 3) {
+      console.log(
+        `%cToo much double`,
+        "background: #292d3e; color: #f07178; font-weight: bold"
+      );
+      endTurn();
+      setStage(0);
+    }
+    return () => {
+      setRollCount(0);
+    };
+  }, [rollCount]);
+
+  useEffect(() => {
     console.log(Stages[currentStage]);
     switch (currentStage) {
       case 0:
         //check if diceRolled is double or not
         let currentPlayerInInt = parseInt(ctx.currentPlayer);
-        console.log(
-          `%c---------------------------`,
-          "background: #292d3e; color: #f07178; font-weight: bold"
-        );
-        console.log(
-          G.diceRolled[currentPlayerInInt][0],
-          G.diceRolled[currentPlayerInInt][1]
-        );
-        console.log(
-          `%c---------------------------`,
-          "background: #292d3e; color: #f07178; font-weight: bold"
-        );
         if (
           G.diceRolled[currentPlayerInInt][0] ===
             G.diceRolled[currentPlayerInInt][1] &&
@@ -266,22 +266,6 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
         }
         //else end turn
         else {
-          console.log(
-            `%c---------------------------`,
-            "background: #292d3e; color: #f07178; font-weight: bold"
-          );
-          console.log(
-            G.diceRolled[currentPlayerInInt][0],
-            G.diceRolled[currentPlayerInInt][1]
-          );
-          console.log(
-            `%c---------------------------`,
-            "background: #292d3e; color: #f07178; font-weight: bold"
-          );
-          console.log(
-            `%cEnd turn`,
-            "background: #292d3e; color: #f07178; font-weight: bold"
-          );
           endTurn();
         }
         //dice move => enable roll button
@@ -299,12 +283,18 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
         setIsUpgradeAble(false);
         break;
       case 2:
-        //purchase => enable purchase
-        setIsPurchaseAble(true);
-        //disable other
-        setIsRollAble(false);
-        setIsSellAble(false);
-        setIsUpgradeAble(false);
+        //check if purchase able
+        if (isOwnedResort(G, ctx) || isOwnedLevel4Building(G, ctx)) {
+          console.log("Not purchase able bcs -------");
+          setStage(0);
+        } else {
+          //purchase => enable purchase
+          setIsPurchaseAble(true);
+          //disable other
+          setIsRollAble(false);
+          setIsSellAble(false);
+          setIsUpgradeAble(false);
+        }
         break;
       case 3:
         //upgrade => enable upgrade
@@ -323,7 +313,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
   const BlockFull = (
     blockId: number,
     monoThemeColor: string,
-    playerPos: number[][] = G.playerPositions
+    playerPos: string[][] = G.playerPositions
   ) => {
     return (
       <Flex {...blockContentContainerStyle}>
@@ -540,6 +530,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
               incMoveCount={incMoveCount}
               moveCount={moveCount}
               isCurrentPlayer={isCurrentPlayer}
+              incRollCount={incRollCount}
             ></Rolling>
             <Flex
               flexDir="row"

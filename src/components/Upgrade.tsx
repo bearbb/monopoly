@@ -44,17 +44,17 @@ export const Upgrade = ({
     if (G.diceRolled[0] === G.diceRolled[1]) {
       //else end turn
     } else {
-      console.log(
-        `%cEnd turn`,
-        "background: #292d3e; color: #f07178; font-weight: bold"
-      );
+      // console.log(
+      //   `%cEnd turn`,
+      //   "background: #292d3e; color: #f07178; font-weight: bold"
+      // );
       // endTurn();
     }
   };
   const [upgradePrice, setUpgradePrice] = useState<number | null>(null);
   useEffect(() => {
     const priceToUpgrade = getUpgradePrice(G, ctx);
-    console.log(priceToUpgrade);
+    // console.log(priceToUpgrade);
     if (priceToUpgrade !== -1) {
       setUpgradePrice(priceToUpgrade);
     }

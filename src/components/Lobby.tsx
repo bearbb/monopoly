@@ -50,10 +50,10 @@ export const Lobby = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(
-      `%c${userData}`,
-      "background: #292d3e; color: #f07178; font-weight: bold"
-    );
+    // console.log(
+    //   `%c${userData}`,
+    //   "background: #292d3e; color: #f07178; font-weight: bold"
+    // );
     return () => {};
   }, []);
 
@@ -73,7 +73,7 @@ export const Lobby = () => {
     }
   };
   useEffect(() => {
-    console.log(playersData);
+    // console.log(playersData);
     return () => {};
   }, [playersData]);
 
