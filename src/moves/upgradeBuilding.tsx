@@ -10,7 +10,15 @@ export const isUpgradeAble = (G: any, ctx: any): boolean => {
   // );
   //check if this block is this player's asset
   // console.log(G.blocksData[currentPos].type);
-  if (currentPos !== -1 && G.blocksData[currentPos].type === "CITY") {
+  console.log(
+    "current building level is: ",
+    G.blocksData[currentPos].buildingLevel
+  );
+  if (
+    currentPos !== -1 &&
+    G.blocksData[currentPos].type === "CITY" &&
+    G.blocksData[currentPos].buildingLevel < 4
+  ) {
     // console.log(G.blockOwners);
     if (G.blockOwners[currentPos] === ctx.currentPlayer) {
       let priceToUpgrade =

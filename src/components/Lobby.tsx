@@ -10,7 +10,10 @@ import {
   Badge,
   Text,
   Image,
+  Center,
+  useToast,
 } from "@chakra-ui/react";
+import { CopyIcon } from "@chakra-ui/icons";
 
 //contexts
 import { UserContext, useUserContext } from "src/contexts/UserContext";
@@ -48,6 +51,7 @@ export const Lobby = () => {
   const { userData, setUserData } = useUserContext();
   const [isAllReady, setIsAllReady] = useState<boolean>(false);
   const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     // console.log(
@@ -154,6 +158,21 @@ export const Lobby = () => {
           >
             {userData.lobbyId}
           </Text>
+          <Center h="100%" ml={4}>
+            <CopyIcon
+              color="purple.400"
+              boxSize={8}
+              cursor="pointer"
+              _hover={{ color: "purple.700" }}
+              onClick={() => {
+                navigator.clipboard.writeText(userData.lobbyId);
+                toast({
+                  description: "lobby id copied",
+                  status: "success",
+                });
+              }}
+            ></CopyIcon>
+          </Center>
         </Flex>
         <Flex w="100%" justifyContent="space-between" h="60%">
           {renderPlayerNToken(playersData)}

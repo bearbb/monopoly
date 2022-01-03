@@ -15,6 +15,7 @@ import {
 import { isUpgradeAble } from "src/moves/upgradeBuilding";
 import { findCurrentBlock, getBlockPrice } from "src/utils/utilities";
 import { isOwnedLevel4Building } from "src/moves/purchaseCity";
+import { useUserContext } from "src/contexts/UserContext";
 
 interface PurchaseProps {
   G: any;
@@ -32,6 +33,7 @@ export const Purchase = ({
   incMoveCount,
   moveCount,
 }: PurchaseProps) => {
+  const { userData, setUserData } = useUserContext();
   const [isJustPurchase, setIsJustPurchase] = useState<boolean>(false);
   const toast = useToast();
   const purchaseHandler = () => {
@@ -67,7 +69,7 @@ export const Purchase = ({
 
   const [blockPrice, setBlockPrice] = useState<number | null>(null);
   useEffect(() => {
-    const blockId = findCurrentBlock(G.playerPositions, ctx.currentPlayer);
+    const blockId = findCurrentBlock(G.playerPositions, userData.playerId);
     //check if this block is owned by other one
     if (blockId !== -1) {
       const price = getBlockPrice(G.blocksData, G.blockOwners, blockId);
@@ -82,6 +84,8 @@ export const Purchase = ({
           "background: #292d3e; color: #f07178; font-weight: bold"
         );
         setIsRepurchase(true);
+      } else {
+        setIsRepurchase(false);
       }
     }
 

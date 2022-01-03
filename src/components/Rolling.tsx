@@ -46,6 +46,7 @@ export const Rolling = ({
   moveCount,
   isCurrentPlayer,
   incRollCount,
+  endTurn,
 }: {
   G: any;
   ctx: any;
@@ -57,30 +58,65 @@ export const Rolling = ({
   moveCount: number;
   isCurrentPlayer: boolean;
   incRollCount: () => void;
+  endTurn: () => void;
 }) => {
   const toast = useToast();
   const { userData, setUserData } = useUserContext();
-  const [rollCount, setRollCount] = useState<number>(0);
   const [diceValue, setDiceValue] = useState<string[]>(["one", "one"]);
   const [isRolling, setIsRolling] = useState<boolean>(false);
   const [isJustCome, setIsJustCome] = useState<boolean>(false);
-  const [cheatDiceValue, setCheatDiceValue] = useState<number[]>([0, 0]);
+  const [cheatDiceValue, setCheatDiceValue] = useState<number[]>([-1, 0]);
+  const [isInPrison, setIsInPrison] = useState(false);
+
+  useEffect(() => {
+    let currentPos = findCurrentBlock(G.playerPositions, userData.playerId);
+    if (currentPos === 8) {
+      setIsInPrison(true);
+    } else {
+      setIsInPrison(false);
+    }
+    return () => {};
+  }, [G.playerPositions]);
+  useEffect(() => {
+    console.log(
+      `%cIs in prison`,
+      "background: #292d3e; color: #f07178; font-weight: bold"
+    );
+    return () => {};
+  }, [isInPrison]);
+
+  const diceMoveCompact = (d1: number, d2: number) => {
+    moves.diceMove(d1, d2);
+    setIsJustCome(true);
+    setTimeout(() => {
+      //check if user have to pay rent
+    }, 1000);
+    incMoveCount();
+    incRollCount();
+  };
   const cheatRollHandler = () => {
     setIsRolling(true);
     setTimeout(() => {
       setDiceValue(diceValueInStr(cheatDiceValue[0], cheatDiceValue[1]));
       setIsRolling(false);
     }, 1000);
-    moves.diceMove(cheatDiceValue[0], cheatDiceValue[1]);
-    setIsJustCome(true);
-    let temp = rollCount;
-    temp++;
-    setRollCount(temp);
-    setTimeout(() => {
-      //check if user have to pay rent
-    }, 1000);
-    incMoveCount();
-    incRollCount();
+
+    //if is in prison then have to roll double to get out
+    if (isInPrison) {
+      if (cheatDiceValue[0] !== cheatDiceValue[1]) {
+        toast({
+          title: "prison rule",
+          description: "u have to rolled double to continue",
+          isClosable: true,
+          duration: 5000,
+        });
+        endTurn();
+      } else {
+        diceMoveCompact(cheatDiceValue[0], cheatDiceValue[1]);
+      }
+    } else {
+      diceMoveCompact(cheatDiceValue[0], cheatDiceValue[1]);
+    }
   };
   const rollDiceHandler = () => {
     setIsRolling(true);
@@ -89,16 +125,22 @@ export const Rolling = ({
       setDiceValue(diceValueInStr(diceVl[0], diceVl[1]));
       setIsRolling(false);
     }, 1000);
-    moves.diceMove(diceVl[0], diceVl[1]);
-    setIsJustCome(true);
-    let temp = rollCount;
-    temp++;
-    setRollCount(temp);
-    setTimeout(() => {
-      //check if user have to pay rent
-    }, 1000);
-    incMoveCount();
-    incRollCount();
+    //if is in prison then have to roll double to get out
+    if (isInPrison) {
+      if (diceVl[0] !== diceVl[1]) {
+        toast({
+          title: "prison rule",
+          description: "u have to rolled double to continue",
+          isClosable: true,
+          duration: 5000,
+        });
+        endTurn();
+      } else {
+        diceMoveCompact(diceVl[0], diceVl[1]);
+      }
+    } else {
+      diceMoveCompact(diceVl[0], diceVl[1]);
+    }
   };
 
   //auto pay rent after rolling and if not able to pay rent => change to selling

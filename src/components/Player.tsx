@@ -29,7 +29,14 @@ export const Player = ({ tokenId }: PlayerProps) => {
   return (
     <CenteredFlex>
       {tokenId.map((tid) => {
-        return <Image src={tokenSelector(tid)} w={25} opacity={0.95}></Image>;
+        return (
+          <Image
+            key={tid}
+            src={tokenSelector(tid)}
+            w={25}
+            opacity={0.95}
+          ></Image>
+        );
       })}
     </CenteredFlex>
   );

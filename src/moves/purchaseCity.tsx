@@ -89,14 +89,16 @@ export const isOwnedLevel4Building = (G: any, ctx: any) => {
     G.playerPositions,
     ctx.currentPlayer
   );
-  if (
-    G.blocksData[playerCurrentBlock].type === "CITY" &&
-    G.blocksData[playerCurrentBlock].buildingLevel === 4
-  ) {
-    // console.log(
-    //   `%cIs owned lv 4 building`,
-    //   "background: #292d3e; color: #f07178; font-weight: bold"
-    // );
-    return true;
+  if (playerCurrentBlock !== -1) {
+    if (
+      G.blocksData[playerCurrentBlock].type === "CITY" &&
+      G.blocksData[playerCurrentBlock].buildingLevel === 4
+    ) {
+      // console.log(
+      //   `%cIs owned lv 4 building`,
+      //   "background: #292d3e; color: #f07178; font-weight: bold"
+      // );
+      return true;
+    } else return false;
   } else return false;
 };

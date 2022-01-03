@@ -71,3 +71,8 @@ export const toPrison = (G: any, ctx: any) => {
   //   `Current position is in ${G.blocksData[incomingPos].specialName}`
   // );
 };
+export const incRollCount = (G: any, ctx: any) => {
+  //incRollCount of current player
+  let temp = G.rollCount[parseInt(ctx.currentPlayer)];
+  G.rollCount[parseInt(ctx.currentPlayer)] = temp + 1;
+};

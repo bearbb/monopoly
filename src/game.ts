@@ -2,7 +2,7 @@ import { blocksData } from "src/data/blocksData";
 import { purchaseCity } from "src/moves/purchaseCity";
 import { repurchaseCity } from "src/moves/repurchaseCity";
 import { upgradeBuilding } from "src/moves/upgradeBuilding";
-import { diceMove } from "src/moves/diceMove";
+import { diceMove, toPrison, incRollCount } from "src/moves/diceMove";
 import { cheatMove } from "src/moves/cheatMove";
 import { payRent } from "src/moves/payRent";
 import { sellAsset } from "src/moves/sellAsset";
@@ -43,6 +43,8 @@ export const monopoly: Game<MonopolyState> = {
   },
   moves: {
     endTurn: (G: any, ctx: any) => {
+      //reset roll count
+      G.rollCount[parseInt(ctx.currentPlayer)] = 0;
       ctx.events.endTurn();
     },
     diceMove,
@@ -56,6 +58,8 @@ export const monopoly: Game<MonopolyState> = {
     setPlayerMoney: (G: any, ctx: any) => {
       G.playerMoney[ctx.currentPlayer] = 0;
     },
+    toPrison,
+    incRollCount,
   },
   endIf: (G: any, ctx: any) => {
     if (isMonopoly(G.blockOwners)) {

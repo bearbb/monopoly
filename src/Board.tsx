@@ -4,6 +4,7 @@ import { BoardProps } from "boardgame.io/react";
 import { MonopolyState } from "src/game";
 import { isUpgradeAble as isUpAble } from "src/moves/upgradeBuilding";
 import {
+  useToast,
   ChakraProvider,
   extendTheme,
   Grid,
@@ -39,11 +40,12 @@ import prisonImg from "src/assets/BoardImg/prison.png";
 import fifaImg from "src/assets/BoardImg/fifa.png";
 import de_airportImg from "src/assets/BoardImg/de_airport.png";
 import chancesImg from "src/assets/BoardImg/drawCard.png";
-import { Rolling } from "./components/Rolling";
-import { useUserContext } from "./contexts/UserContext";
-import { priceMultiplier } from "./data/priceMultiplier";
-import { PlayerMoney } from "./components/PlayerMoney";
+import { Rolling } from "src/components/Rolling";
+import { useUserContext } from "src/contexts/UserContext";
+import { priceMultiplier } from "src/data/priceMultiplier";
+import { PlayerMoney } from "src/components/PlayerMoney";
 import { isOwnedLevel4Building, isOwnedResort } from "./moves/purchaseCity";
+import { Building } from "src/components/Building";
 
 const MoneyBGColor = "gray.50";
 const MonopolyColorTheme = {
@@ -92,13 +94,25 @@ export const CenteredFlex = (props: FlexProps) => (
     alignItems="center"
   ></Flex>
 );
-const FirstHalfBlock = (blockId: number, monoThemeColor: string) => {
+const FirstHalfBlock = (
+  blockId: number,
+  monoThemeColor: string,
+  gBlocksData: any[],
+  buildingLevel: number[],
+  blockOwners: (number | null)[]
+) => {
   let cityName = blocksData[blockId].cityName;
   return (
-    <Flex {...firstHalfBlockStyle} bg={monoThemeColor}>
+    <Flex {...firstHalfBlockStyle} bg={monoThemeColor} flexDir="column" gap={2}>
       <Text fontSize="xs" fontWeight="bold" color="gray.700" textAlign="center">
         {cityName}
       </Text>
+      <Building
+        blockId={blockId}
+        blocksData={gBlocksData}
+        buildingLevel={buildingLevel}
+        blockOwners={blockOwners}
+      />
     </Flex>
   );
 };
@@ -153,7 +167,7 @@ const OverlayBlock = (blockId: number, playerPos: string[][]) => {
 
 const GridItemStyle: GridItemProps = {};
 
-const Stages = ["diceMove", "sell", "purchase", "upgrade"];
+const Stages = ["diceMove", "sell", "purchase", "upgrade", "chances"];
 
 const getRentPrice = (
   blockOwners: (number | null)[],
@@ -194,16 +208,19 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
   const [buildingLevel, setBuildingLevel] = useState<number[]>(
     Array(32).fill(null)
   );
-  const [rollCount, setRollCount] = useState(0);
+  // const [rollCount, setRollCount] = useState(0);
   const [isCurrentPlayer, setIsCurrentPlayer] = useState<boolean>(false);
   const [moveCount, setMoveCount] = useState<number>(0);
+  const toast = useToast();
   const incMoveCount = () => {
     let temp = moveCount + 1;
     setMoveCount(temp);
   };
   const incRollCount = () => {
-    let temp = rollCount + 1;
-    setRollCount(temp);
+    moves.incRollCount();
+  };
+  const toPrison = () => {
+    moves.toPrison();
   };
 
   const endTurn = () => {
@@ -238,18 +255,29 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
   }, [G.playerPositions, G.blockOwners, G.blocksData]);
 
   useEffect(() => {
-    if (rollCount >= 3) {
+    console.log(G.rollCount[parseInt(ctx.currentPlayer)]);
+    if (
+      G.rollCount[parseInt(ctx.currentPlayer)] >= 3 &&
+      G.diceRolled[parseInt(ctx.currentPlayer)][0] ===
+        G.diceRolled[parseInt(ctx.currentPlayer)][1]
+    ) {
       console.log(
         `%cToo much double`,
         "background: #292d3e; color: #f07178; font-weight: bold"
       );
+      toast({
+        title: "too lucky to continue",
+        description:
+          "ur have rolled 3 double continuously, u go to prison now !!!",
+        isClosable: true,
+        duration: 4000,
+      });
+      toPrison();
       endTurn();
       setStage(0);
     }
-    return () => {
-      setRollCount(0);
-    };
-  }, [rollCount]);
+    return () => {};
+  }, [G.rollCount]);
 
   useEffect(() => {
     console.log(Stages[currentStage]);
@@ -317,7 +345,13 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
   ) => {
     return (
       <Flex {...blockContentContainerStyle}>
-        {FirstHalfBlock(blockId, monoThemeColor)}
+        {FirstHalfBlock(
+          blockId,
+          monoThemeColor,
+          G.blocksData,
+          buildingLevel,
+          G.blockOwners
+        )}
         {SecondHalfBlock(blockId, rentPrice)}
         {OverlayBlock(blockId, playerPos)}
       </Flex>
@@ -531,6 +565,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
               moveCount={moveCount}
               isCurrentPlayer={isCurrentPlayer}
               incRollCount={incRollCount}
+              endTurn={endTurn}
             ></Rolling>
             <Flex
               flexDir="row"

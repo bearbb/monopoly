@@ -39,7 +39,10 @@ export const getBlockPrice = (
       //if that block is RESORT and owned u can't purchase
       if (blockData.type !== "RESORT") {
         //if it owned by other one u have to pay x time base price to them
-        let priceToPay = blockData.basePrice * priceMultiplier.isOwnedByOther;
+        let priceToPay =
+          blockData.basePrice *
+          priceMultiplier.isOwnedByOther *
+          blockData.buildingLevel;
         returnData.blockPrice = priceToPay;
         returnData.playerIdToReturnMoney = blockOwners[blockId];
       }
