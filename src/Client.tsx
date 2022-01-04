@@ -11,7 +11,7 @@ export const Client = BoardGameClient({
   game: monopoly,
   numPlayers: 4,
   board: Board,
-  multiplayer: SocketIO({ server: "localhost:8000" }),
+  multiplayer: SocketIO({ server: "localhost:6969" }),
   debug: false,
 });
 

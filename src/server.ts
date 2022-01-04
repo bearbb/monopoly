@@ -8,6 +8,6 @@ const server = Server({
 
 const PORT = process.env.PORT || 8000;
 
-server.run(8000);
+server.run(6969);
 
 export {};
