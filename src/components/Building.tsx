@@ -7,6 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Flex, Icon } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 interface BuildingProps {
   blockId: number;
   blocksData: any[];
@@ -54,7 +55,7 @@ export const Building = ({
   };
 
   return (
-    <Flex justifyContent="flexStart" w="100%" ml={3}>
+    <Flex justifyContent="flexStart" w="100%" ml={3} h="30%" flexGrow={1}>
       {!isResort && currentBuildingLevel >= 1 ? (
         <FontAwesomeIcon
           icon={iconSelector()}

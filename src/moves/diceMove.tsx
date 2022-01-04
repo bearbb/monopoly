@@ -1,5 +1,7 @@
 import { findCurrentBlock } from "src/utils/utilities";
 import { isHaveToPayRent, payRent } from "src/moves/payRent";
+import { addMoneyToCurrentPlayer } from "src/moves/updateMoney";
+import { moneyAmount } from "src/data/priceMultiplier";
 //roll dices
 const rollDices = (): { firstDice: number; secondDice: number } => {
   let firstDice = Math.floor(Math.random() * 6) + 1;
@@ -35,7 +37,9 @@ export const diceMove = (G: any, ctx: any, d1: number, d2: number) => {
     incomingPos = diceValue.firstDice + diceValue.secondDice;
   }
   if (incomingPos > 31) {
-    incomingPos = incomingPos - 31;
+    incomingPos = incomingPos - 32;
+    //add money to current player bcs go through GO block
+    addMoneyToCurrentPlayer(G, ctx, moneyAmount.throughGoBlock);
   }
   //add userId to new block pos
   G.playerPositions[incomingPos].push(userId);

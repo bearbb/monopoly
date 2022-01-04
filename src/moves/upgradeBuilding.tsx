@@ -10,10 +10,6 @@ export const isUpgradeAble = (G: any, ctx: any): boolean => {
   // );
   //check if this block is this player's asset
   // console.log(G.blocksData[currentPos].type);
-  console.log(
-    "current building level is: ",
-    G.blocksData[currentPos].buildingLevel
-  );
   if (
     currentPos !== -1 &&
     G.blocksData[currentPos].type === "CITY" &&

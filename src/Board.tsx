@@ -1,12 +1,11 @@
-import React, { Component, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { blockData } from "src/data/blocksData";
 import { BoardProps } from "boardgame.io/react";
 import { MonopolyState } from "src/game";
 import { isUpgradeAble as isUpAble } from "src/moves/upgradeBuilding";
+import { kFormatter } from "src/utils/utilities";
 import {
   useToast,
-  ChakraProvider,
-  extendTheme,
   Grid,
   GridItem,
   GridItemProps,
@@ -16,20 +15,14 @@ import {
   Text,
   Popover,
   PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor,
   Button,
 } from "@chakra-ui/react";
 
 //components
 import { Player } from "src/components/Player";
 import { Purchase } from "src/components/Purchase";
-import { Upgrade } from "./components/Upgrade";
+import { Upgrade } from "src/components/Upgrade";
+import { Selling } from "src/components/Selling";
 
 //board data
 import { blocksData } from "src/data/blocksData";
@@ -44,7 +37,12 @@ import { Rolling } from "src/components/Rolling";
 import { useUserContext } from "src/contexts/UserContext";
 import { priceMultiplier } from "src/data/priceMultiplier";
 import { PlayerMoney } from "src/components/PlayerMoney";
-import { isOwnedLevel4Building, isOwnedResort } from "./moves/purchaseCity";
+import {
+  isAlreadyOwnedCity,
+  isEnoughMoneyToPurchase,
+  isOwnedLevel4Building,
+  isOwnedResort,
+} from "./moves/purchaseCity";
 import { Building } from "src/components/Building";
 
 const MoneyBGColor = "gray.50";
@@ -104,7 +102,13 @@ const FirstHalfBlock = (
   let cityName = blocksData[blockId].cityName;
   return (
     <Flex {...firstHalfBlockStyle} bg={monoThemeColor} flexDir="column" gap={2}>
-      <Text fontSize="xs" fontWeight="bold" color="gray.700" textAlign="center">
+      <Text
+        fontSize="xs"
+        fontWeight="bold"
+        color="gray.700"
+        textAlign="center"
+        flexGrow={2}
+      >
         {cityName}
       </Text>
       <Building
@@ -116,11 +120,11 @@ const FirstHalfBlock = (
     </Flex>
   );
 };
-function kFormatter(num: number) {
-  return Math.abs(num) > 999
-    ? (Math.sign(num) * (Math.abs(num) / 1000)).toFixed(1) + "K"
-    : Math.sign(num) * Math.abs(num);
-}
+// function kFormatter(num: number) {
+//   return Math.abs(num) > 999
+//     ? (Math.sign(num) * (Math.abs(num) / 1000)).toFixed(1) + "K"
+//     : Math.sign(num) * Math.abs(num);
+// }
 const SecondHalfBlock = (blockId: number, rentPriceList: number[]) => {
   let rentPrice = rentPriceList[blockId];
   if (rentPrice !== undefined) {
@@ -211,6 +215,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
   // const [rollCount, setRollCount] = useState(0);
   const [isCurrentPlayer, setIsCurrentPlayer] = useState<boolean>(false);
   const [moveCount, setMoveCount] = useState<number>(0);
+  const [assetToSell, setAssetToSell] = useState<number[]>([]);
   const toast = useToast();
   const incMoveCount = () => {
     let temp = moveCount + 1;
@@ -225,6 +230,9 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
 
   const endTurn = () => {
     moves.endTurn();
+  };
+  const sellAssets = (assets: number[]) => {
+    moves.sellAssets(assets);
   };
 
   const setStage = (stageId: number) => {
@@ -255,7 +263,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
   }, [G.playerPositions, G.blockOwners, G.blocksData]);
 
   useEffect(() => {
-    console.log(G.rollCount[parseInt(ctx.currentPlayer)]);
+    // console.log(G.rollCount[parseInt(ctx.currentPlayer)]);
     if (
       G.rollCount[parseInt(ctx.currentPlayer)] >= 3 &&
       G.diceRolled[parseInt(ctx.currentPlayer)][0] ===
@@ -312,7 +320,12 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
         break;
       case 2:
         //check if purchase able
-        if (isOwnedResort(G, ctx) || isOwnedLevel4Building(G, ctx)) {
+        if (
+          isOwnedResort(G, ctx) ||
+          isOwnedLevel4Building(G, ctx) ||
+          isAlreadyOwnedCity(G, ctx) ||
+          !isEnoughMoneyToPurchase(G, ctx)
+        ) {
           console.log("Not purchase able bcs -------");
           setStage(0);
         } else {
@@ -359,6 +372,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
   };
   return (
     <Flex
+      userSelect="none"
       w="100vw"
       h="100vh"
       justifyContent="center"
@@ -595,6 +609,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
                     disabled={!isPurchaseAble}
                     borderWidth={2}
                     borderColor="white"
+                    w={102}
                   >
                     purchase
                   </Button>
@@ -622,6 +637,7 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
                     disabled={!isUpgradeAble}
                     borderWidth={2}
                     borderColor="white"
+                    w={102}
                   >
                     upgrade
                   </Button>
@@ -634,6 +650,35 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
                   moveCount={moveCount}
                   incMoveCount={incMoveCount}
                   endTurn={endTurn}
+                />
+              </Popover>
+              <Popover
+                isOpen={isSellAble}
+                onClose={() => {
+                  // setIsSellAble(false);
+                  setStage(2);
+                }}
+              >
+                <PopoverTrigger>
+                  <Button
+                    colorScheme="red"
+                    disabled={!isSellAble}
+                    borderWidth={2}
+                    borderColor="white"
+                    w={102}
+                  >
+                    sell
+                  </Button>
+                </PopoverTrigger>
+                <Selling
+                  G={G}
+                  ctx={ctx}
+                  moves={moves}
+                  buildingLevel={buildingLevel}
+                  assetToSell={assetToSell}
+                  setAssetToSell={setAssetToSell}
+                  sellAssets={sellAssets}
+                  setStage={setStage}
                 />
               </Popover>
             </Flex>

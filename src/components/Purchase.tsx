@@ -35,6 +35,7 @@ export const Purchase = ({
 }: PurchaseProps) => {
   const { userData, setUserData } = useUserContext();
   const [isJustPurchase, setIsJustPurchase] = useState<boolean>(false);
+  const [isAbleToPurchase, setIsAbleToPurchase] = useState<boolean>(false);
   const toast = useToast();
   const purchaseHandler = () => {
     if (!isRepurchase) {
@@ -90,7 +91,7 @@ export const Purchase = ({
     }
 
     return () => {};
-  }, [G.playerPositions]);
+  }, [moveCount, G, ctx, userData]);
   const [isRepurchase, setIsRepurchase] = useState<boolean>(false);
 
   return (

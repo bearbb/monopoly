@@ -153,15 +153,16 @@ export const Lobby = () => {
             borderWidth={1}
             rounded={3}
             borderColor="purple.400"
-            p="0 3px 0 3px"
+            p="0 7px 0 7px"
             color="purple.700"
           >
             {userData.lobbyId}
           </Text>
           <Center h="100%" ml={4}>
             <CopyIcon
-              color="purple.400"
-              boxSize={8}
+              fontWeight="extrabold"
+              color="purple.500"
+              boxSize={7}
               cursor="pointer"
               _hover={{ color: "purple.700" }}
               onClick={() => {
@@ -169,6 +170,8 @@ export const Lobby = () => {
                 toast({
                   description: "lobby id copied",
                   status: "success",
+                  isClosable: true,
+                  duration: 4000,
                 });
               }}
             ></CopyIcon>

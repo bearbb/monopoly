@@ -8,6 +8,7 @@ import {
   Flex,
   Heading,
   Text,
+  Center,
 } from "@chakra-ui/react";
 
 //router
@@ -132,7 +133,7 @@ export const JoinLobby = () => {
       >
         <Flex
           flexDirection="column"
-          flexGrow="1;0"
+          flexGrow={1}
           //   p={15}
           alignItems="center"
           justifyContent="center"
@@ -154,12 +155,16 @@ export const JoinLobby = () => {
               borderWidth={3}
               borderColor="blackAlpha.200"
               cursor="pointer"
-            ></Box>
+            >
+              <Center w="100%" h="100%">
+                <Text>*coming soon*</Text>
+              </Center>
+            </Box>
           </Flex>
         </Flex>
         <Flex
           flexDirection="column"
-          flexGrow={1.5}
+          flexGrow={1}
           w=""
           justifyContent="center"
           //   alignItems="flex-start"

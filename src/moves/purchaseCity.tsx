@@ -1,5 +1,6 @@
 import { findCurrentBlock, getBlockPrice } from "src/utils/utilities";
 import { INVALID_MOVE } from "boardgame.io/core";
+import { priceMultiplier } from "src/data/priceMultiplier";
 export const purchaseCity = (G: any, ctx: any) => {
   //check if current pos is CITY or RESORT
   const playerCurrentBlock = findCurrentBlock(
@@ -101,4 +102,43 @@ export const isOwnedLevel4Building = (G: any, ctx: any) => {
       return true;
     } else return false;
   } else return false;
+};
+
+export const isAlreadyOwnedCity = (G: any, ctx: any): boolean => {
+  const playerCurrentBlock = findCurrentBlock(
+    G.playerPositions,
+    ctx.currentPlayer
+  );
+  if (playerCurrentBlock !== -1) {
+    //check if current block owner is the same as the current player
+    return G.blockOwners[playerCurrentBlock] === ctx.currentPlayer;
+  } else {
+    return false;
+  }
+};
+
+export const isEnoughMoneyToPurchase = (G: any, ctx: any): boolean => {
+  const playerCurrentBlock = findCurrentBlock(
+    G.playerPositions,
+    ctx.currentPlayer
+  );
+  console.log(
+    G.playerMoney[parseInt(ctx.currentPlayer)] >=
+      getBlockPrice(G.blocksData, G.blockOwners, playerCurrentBlock).blockPrice
+  );
+  if (playerCurrentBlock !== -1) {
+    // return (
+    //   G.playerMoney[parseInt(ctx.currentPlayer)] >=
+    //   G.blocksData[playerCurrentBlock].basePrice *
+    //     (G.blocksData[playerCurrentBlock].buildingLevel > 0
+    //       ? G.blocksData[playerCurrentBlock].buildingLevel
+    //       : 1)
+    // );
+    return (
+      G.playerMoney[parseInt(ctx.currentPlayer)] >=
+      getBlockPrice(G.blocksData, G.blockOwners, playerCurrentBlock).blockPrice
+    );
+  } else {
+    return false;
+  }
 };

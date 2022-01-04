@@ -76,14 +76,10 @@ export const Rolling = ({
       setIsInPrison(false);
     }
     return () => {};
-  }, [G.playerPositions]);
-  useEffect(() => {
-    console.log(
-      `%cIs in prison`,
-      "background: #292d3e; color: #f07178; font-weight: bold"
-    );
-    return () => {};
-  }, [isInPrison]);
+  }, [G.playerPositions, userData.playerId]);
+  // useEffect(() => {
+  //   return () => {};
+  // }, [isInPrison]);
 
   const diceMoveCompact = (d1: number, d2: number) => {
     moves.diceMove(d1, d2);
@@ -96,6 +92,17 @@ export const Rolling = ({
   };
   const cheatRollHandler = () => {
     setIsRolling(true);
+    //toast for receive money
+    const currentPos = findCurrentBlock(G.playerPositions, userData.playerId);
+    const incomingPos = currentPos + cheatDiceValue[0] + cheatDiceValue[1];
+    if (incomingPos >= 31) {
+      toast({
+        title: "! cash cash !",
+        description: "u have received 100k for being alive",
+        status: "success",
+        isClosable: true,
+      });
+    }
     setTimeout(() => {
       setDiceValue(diceValueInStr(cheatDiceValue[0], cheatDiceValue[1]));
       setIsRolling(false);
@@ -121,6 +128,17 @@ export const Rolling = ({
   const rollDiceHandler = () => {
     setIsRolling(true);
     let diceVl = dRoll();
+    //toast for receive money
+    const currentPos = findCurrentBlock(G.playerPositions, userData.playerId);
+    const incomingPos = currentPos + diceVl[0] + diceVl[1];
+    if (incomingPos > 31) {
+      toast({
+        title: "! cash cash !",
+        description: "u have received 100k for being alive",
+        status: "success",
+        isClosable: true,
+      });
+    }
     setTimeout(() => {
       setDiceValue(diceValueInStr(diceVl[0], diceVl[1]));
       setIsRolling(false);
@@ -166,6 +184,7 @@ export const Rolling = ({
       //check if current pos is upAble (owned asset)
       // console.log(isUpAble(G, ctx));
       if (isUpAble(G, ctx)) {
+        // if (false) {
         setStage(3);
       } else {
         if (isJustCome) {
@@ -228,7 +247,7 @@ export const Rolling = ({
         >
           roll
         </Button>
-        <Flex>
+        {/* <Flex>
           <Input
             placeholder="dice 1"
             onChange={(e) => {
@@ -252,7 +271,7 @@ export const Rolling = ({
           >
             cheat roll
           </Button>
-        </Flex>
+        </Flex> */}
       </Flex>
     </Flex>
   );

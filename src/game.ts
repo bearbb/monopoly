@@ -5,12 +5,13 @@ import { upgradeBuilding } from "src/moves/upgradeBuilding";
 import { diceMove, toPrison, incRollCount } from "src/moves/diceMove";
 import { cheatMove } from "src/moves/cheatMove";
 import { payRent } from "src/moves/payRent";
-import { sellAsset } from "src/moves/sellAsset";
+import { sellAsset, sellAssets } from "src/moves/sellAsset";
 import { availAirportMove, airportMove } from "src/moves/airportMove";
 import { isMonopoly, bankruptList } from "src/utils/utilities";
 import { isDouble } from "src/utils/rollRules";
 import { Game } from "boardgame.io";
 import { blockData } from "src/data/blocksData";
+import { addMoneyToCurrentPlayer } from "src/moves/updateMoney";
 
 export interface MonopolyState {
   playerPositions: any[][];
@@ -26,7 +27,7 @@ export const monopoly: Game<MonopolyState> = {
   // create a board with 31 blocks
   setup: (ctx: any) => ({
     playerPositions: Array(32).fill([]),
-    playerMoney: Array(ctx.playOrder.length).fill(8000000),
+    playerMoney: Array(ctx.playOrder.length).fill(300000),
     blocksData,
     blockOwners: Array(32).fill(null),
     playerId: [0, 1, 2, 3],
@@ -54,12 +55,14 @@ export const monopoly: Game<MonopolyState> = {
     upgradeBuilding,
     airportMove,
     sellAsset,
+    sellAssets,
     payRent,
     setPlayerMoney: (G: any, ctx: any) => {
       G.playerMoney[ctx.currentPlayer] = 0;
     },
     toPrison,
     incRollCount,
+    addMoneyToCurrentPlayer,
   },
   endIf: (G: any, ctx: any) => {
     if (isMonopoly(G.blockOwners)) {

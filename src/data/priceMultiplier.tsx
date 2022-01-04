@@ -5,3 +5,7 @@ export const priceMultiplier = {
   repurchase: 1.8,
   sell: 1.65,
 };
+
+export const moneyAmount = {
+  throughGoBlock: 100000,
+};

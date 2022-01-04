@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { FormLabel, Button, Box, Input, Flex, Heading } from "@chakra-ui/react";
+import {
+  FormLabel,
+  Button,
+  Box,
+  Input,
+  Flex,
+  Heading,
+  Center,
+  Text,
+} from "@chakra-ui/react";
 
 //Context
 import { useUserContext, UserContextData } from "src/contexts/UserContext";
@@ -46,6 +55,11 @@ export const CreatePlayer = () => {
       minW={870}
       flexDirection="column"
       padding={30}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          createPlayerHandler();
+        }
+      }}
     >
       <Heading as="h1" mb={50} size="2xl">
         create player
@@ -85,11 +99,11 @@ export const CreatePlayer = () => {
               borderWidth={3}
               borderColor="blackAlpha.200"
               cursor="pointer"
-              //TODO: able to change avatar on click (change to some avail avatar)
-              //       onClick={() => {
-              //         alert("clicked");
-              //       }}
-            ></Box>
+            >
+              <Center w="100%" h="100%">
+                <Text>*coming soon*</Text>
+              </Center>
+            </Box>
           </Flex>
         </Flex>
         <Flex
