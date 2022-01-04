@@ -6,6 +6,8 @@ const server = Server({
   origins: [Origins.LOCALHOST_IN_DEVELOPMENT],
 });
 
+const PORT = process.env.PORT || 8000;
+
 server.run(8000);
 
 export {};
