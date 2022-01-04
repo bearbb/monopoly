@@ -217,6 +217,19 @@ export const Board = ({ G, ctx, moves }: BoardProps<MonopolyState>) => {
   const [moveCount, setMoveCount] = useState<number>(0);
   const [assetToSell, setAssetToSell] = useState<number[]>([]);
   const toast = useToast();
+  useEffect(() => {
+    if (ctx.currentPlayer === userData.playerId) {
+      toast({
+        title: "ur turn",
+        description: "make ur move",
+        status: "info",
+        position: "top",
+        duration: 1000,
+        isClosable: true,
+      });
+    }
+    return () => {};
+  }, [ctx.currentPlayer, userData, toast]);
   const incMoveCount = () => {
     let temp = moveCount + 1;
     setMoveCount(temp);

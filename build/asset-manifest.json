@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.5cd62764.css",
+    "main.js": "/static/js/main.90388ef6.js",
+    "static/js/787.4631cf26.chunk.js": "/static/js/787.4631cf26.chunk.js",
+    "static/media/drawCard.png": "/static/media/drawCard.e1d844567762b632fa65.png",
+    "static/media/prison.png": "/static/media/prison.0bb8be9004c9f1213bf7.png",
+    "static/media/2.png": "/static/media/2.1d96c33d619b5bb636dc.png",
+    "static/media/3.png": "/static/media/3.17042cea428f91a7a2b2.png",
+    "static/media/de_airport.png": "/static/media/de_airport.9ea3a23e52a39b0d9f61.png",
+    "static/media/0.png": "/static/media/0.c1c450fe748a8ce00906.png",
+    "static/media/1.png": "/static/media/1.60a16e9c2fecbb8e7c8c.png",
+    "static/media/fifa.png": "/static/media/fifa.363aae535fecb6b58814.png",
+    "static/media/go.png": "/static/media/go.6610ccc5b10da9f3e491.png",
+    "index.html": "/index.html",
+    "main.5cd62764.css.map": "/static/css/main.5cd62764.css.map",
+    "main.90388ef6.js.map": "/static/js/main.90388ef6.js.map",
+    "787.4631cf26.chunk.js.map": "/static/js/787.4631cf26.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5cd62764.css",
+    "static/js/main.90388ef6.js"
+  ]
+}

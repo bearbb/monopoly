@@ -77,9 +77,19 @@ export const Rolling = ({
     }
     return () => {};
   }, [G.playerPositions, userData.playerId]);
-  // useEffect(() => {
-  //   return () => {};
-  // }, [isInPrison]);
+  useEffect(() => {
+    if (isInPrison) {
+      toast({
+        title: "congratulation",
+        description:
+          "u have just recruited by the Juventus club, (rolled double to get out)",
+        status: "warning",
+        isClosable: true,
+        duration: 3000,
+      });
+    }
+    return () => {};
+  }, [toast, isInPrison]);
 
   const diceMoveCompact = (d1: number, d2: number) => {
     moves.diceMove(d1, d2);
