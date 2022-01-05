@@ -7,11 +7,14 @@ import "src/App.css";
 //server
 import { SocketIO } from "boardgame.io/multiplayer";
 
+const { protocol, hostname, port } = window.location;
+const server = `${protocol}//${hostname}:${port}`;
 export const Client = BoardGameClient({
   game: monopoly,
   numPlayers: 4,
   board: Board,
-  multiplayer: SocketIO({ server: "localhost:6969" }),
+  // multiplayer: SocketIO({ server: "https://gameapi.swanoogie.me" }),
+  multiplayer: SocketIO({ server }),
   debug: false,
 });
 
