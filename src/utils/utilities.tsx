@@ -122,7 +122,9 @@ export const bankruptList = (playerMoney: number[], blockOwners: number[]) => {
   return bankruptPlayerList;
 };
 
-export const lobbyClient = new LobbyClient({ server: urlData.serverURI });
+const { protocol, hostname, port } = window.location;
+const server = `${protocol}//${hostname}:${port}`;
+export const lobbyClient = new LobbyClient({ server });
 
 //check purchase able ??
 
