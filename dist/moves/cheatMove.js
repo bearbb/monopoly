@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cheatMove = void 0;
-const payRent_1 = require("src/moves/payRent");
-const utilities_1 = require("src/utils/utilities");
+const payRent_1 = require("../moves/payRent");
+const utilities_1 = require("../utils/utilities");
 const cheatMove = (G, ctx, blockIdToTeleTo) => {
     const userId = ctx.currentPlayer;
     //find the current block first

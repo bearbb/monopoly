@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isOwnedLevel4Building = exports.isOwnedResort = exports.purchaseCity = void 0;
-const utilities_1 = require("src/utils/utilities");
+exports.isEnoughMoneyToPurchase = exports.isAlreadyOwnedCity = exports.isOwnedLevel4Building = exports.isOwnedResort = exports.purchaseCity = void 0;
+const utilities_1 = require("../utils/utilities");
 const core_1 = require("boardgame.io/core");
 const purchaseCity = (G, ctx) => {
     //check if current pos is CITY or RESORT
@@ -98,3 +98,34 @@ const isOwnedLevel4Building = (G, ctx) => {
         return false;
 };
 exports.isOwnedLevel4Building = isOwnedLevel4Building;
+const isAlreadyOwnedCity = (G, ctx) => {
+    const playerCurrentBlock = (0, utilities_1.findCurrentBlock)(G.playerPositions, ctx.currentPlayer);
+    if (playerCurrentBlock !== -1) {
+        //check if current block owner is the same as the current player
+        return G.blockOwners[playerCurrentBlock] === ctx.currentPlayer;
+    }
+    else {
+        return false;
+    }
+};
+exports.isAlreadyOwnedCity = isAlreadyOwnedCity;
+const isEnoughMoneyToPurchase = (G, ctx) => {
+    const playerCurrentBlock = (0, utilities_1.findCurrentBlock)(G.playerPositions, ctx.currentPlayer);
+    console.log(G.playerMoney[parseInt(ctx.currentPlayer)] >=
+        (0, utilities_1.getBlockPrice)(G.blocksData, G.blockOwners, playerCurrentBlock).blockPrice);
+    if (playerCurrentBlock !== -1) {
+        // return (
+        //   G.playerMoney[parseInt(ctx.currentPlayer)] >=
+        //   G.blocksData[playerCurrentBlock].basePrice *
+        //     (G.blocksData[playerCurrentBlock].buildingLevel > 0
+        //       ? G.blocksData[playerCurrentBlock].buildingLevel
+        //       : 1)
+        // );
+        return (G.playerMoney[parseInt(ctx.currentPlayer)] >=
+            (0, utilities_1.getBlockPrice)(G.blocksData, G.blockOwners, playerCurrentBlock).blockPrice);
+    }
+    else {
+        return false;
+    }
+};
+exports.isEnoughMoneyToPurchase = isEnoughMoneyToPurchase;

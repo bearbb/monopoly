@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.incRollCount = exports.toPrison = exports.diceMove = void 0;
-const utilities_1 = require("src/utils/utilities");
-const updateMoney_1 = require("src/moves/updateMoney");
-const priceMultiplier_1 = require("src/data/priceMultiplier");
+const utilities_1 = require("../utils/utilities");
+const updateMoney_1 = require("../moves/updateMoney");
+const priceMultiplier_1 = require("../data/priceMultiplier");
 //roll dices
 const rollDices = () => {
     let firstDice = Math.floor(Math.random() * 6) + 1;

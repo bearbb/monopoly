@@ -7,7 +7,7 @@ const utilities_1 = require("src/utils/utilities");
 const priceMultiplier_1 = require("src/data/priceMultiplier");
 const react_2 = require("@chakra-ui/react");
 const sellAsset_1 = require("src/moves/sellAsset");
-const Selling = ({ G, ctx, moves, buildingLevel, sellAssets, }) => {
+const Selling = ({ G, ctx, moves, buildingLevel, sellAssets, setStage, }) => {
     const [assetToSell, setAssetToSell] = (0, react_1.useState)([]);
     const [isSellAble, setIsSellAble] = (0, react_1.useState)(false);
     (0, react_1.useEffect)(() => {
@@ -29,7 +29,7 @@ const Selling = ({ G, ctx, moves, buildingLevel, sellAssets, }) => {
         };
         getAvailAsset();
         return () => { };
-    }, [G, ctx]);
+    }, [G, ctx.currentPlayer, ctx]);
     const [assetList, setAssetList] = (0, react_1.useState)([]);
     const addAssetHandler = (blockId) => {
         let temp = assetToSell;
@@ -75,7 +75,7 @@ const Selling = ({ G, ctx, moves, buildingLevel, sellAssets, }) => {
             setTotalSellMoney(total);
         }
         return () => { };
-    }, [assetToSell, sellPriceList]);
+    }, [assetToSell]);
     const renderAllAssetDetail = () => {
         return assetList.map((assetId) => {
             return ((0, jsx_runtime_1.jsx)(react_2.Flex, { gap: 3, children: (0, jsx_runtime_1.jsx)(AssetDetail, { blockId: assetId, blocksData: G.blocksData, buildingLevel: buildingLevel, addAssetHandler: addAssetHandler, removeAssetHandler: removeAssetHandler }, assetId) }, void 0));
@@ -85,8 +85,7 @@ const Selling = ({ G, ctx, moves, buildingLevel, sellAssets, }) => {
                                     //sell all asset in assetToSell
                                     sellAssets(assetToSell);
                                     setAssetToSell([]);
-                                    // setTotalSellMoney(0)
-                                    // setSellPriceList([])
+                                    setStage(2);
                                 }, children: "sell" }, void 0)] }, void 0)] }, void 0)] }, void 0));
 };
 exports.Selling = Selling;

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listAssetPrice = exports.listAsset = exports.sellAssets = exports.sellAsset = void 0;
-const priceMultiplier_1 = require("src/data/priceMultiplier");
+const priceMultiplier_1 = require("../data/priceMultiplier");
 const core_1 = require("boardgame.io/core");
 const sellAsset = (G, ctx, blockId) => {
     let assetsList = (0, exports.listAssetPrice)(G, ctx);

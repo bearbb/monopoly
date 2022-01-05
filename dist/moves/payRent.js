@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.moneyHaveToPay = exports.isHaveEnoughMoneyToPayRent = exports.payRent = exports.isHaveToPayRent = void 0;
-const utilities_1 = require("src/utils/utilities");
-const priceMultiplier_1 = require("src/data/priceMultiplier");
+const utilities_1 = require("../utils/utilities");
+const priceMultiplier_1 = require("../data/priceMultiplier");
 const isHaveToPayRent = (G, ctx) => {
     // console.log(G.playerPositions, ctx.currentPlayer);
     //find current block

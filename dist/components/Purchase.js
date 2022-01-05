@@ -53,7 +53,7 @@ const Purchase = ({ G, ctx, moves, setStage, incMoveCount, moveCount, }) => {
             const price = (0, utilities_1.getBlockPrice)(G.blocksData, G.blockOwners, blockId);
             setBlockPrice(price.blockPrice);
             if (!(0, purchaseCity_1.isOwnedLevel4Building)(G, ctx) &&
-                ctx.currentPlayer != G.blockOwners[blockId] &&
+                ctx.currentPlayer !== G.blockOwners[blockId] &&
                 G.blockOwners[blockId] !== null) {
                 console.log(`%cSet repurchase`, "background: #292d3e; color: #f07178; font-weight: bold");
                 setIsRepurchase(true);
@@ -63,7 +63,7 @@ const Purchase = ({ G, ctx, moves, setStage, incMoveCount, moveCount, }) => {
             }
         }
         return () => { };
-    }, [G.playerPositions]);
+    }, [moveCount, G, ctx, userData]);
     const [isRepurchase, setIsRepurchase] = (0, react_1.useState)(false);
     return ((0, jsx_runtime_1.jsxs)(react_2.PopoverContent, { children: [(0, jsx_runtime_1.jsx)(react_2.PopoverArrow, {}, void 0), (0, jsx_runtime_1.jsx)(react_2.PopoverCloseButton, {}, void 0), (0, jsx_runtime_1.jsx)(react_2.PopoverHeader, { fontWeight: "bold", children: isRepurchase ? "!!! Repurchasing... !!!" : "Purchasing..." }, void 0), (0, jsx_runtime_1.jsx)(react_2.PopoverBody, { children: (0, jsx_runtime_1.jsxs)(react_2.Flex, { flexDir: "column", gap: 5, children: [(0, jsx_runtime_1.jsxs)(react_2.Flex, { w: "100%", gap: 3, children: [(0, jsx_runtime_1.jsx)(react_2.Text, { children: "price: " }, void 0), (0, jsx_runtime_1.jsx)(react_2.Badge, { colorScheme: "pink", children: blockPrice }, void 0)] }, void 0), (0, jsx_runtime_1.jsx)(react_2.Button, { colorScheme: "blue", onClick: () => {
                                 purchaseHandler();

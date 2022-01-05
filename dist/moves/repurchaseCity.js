@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.repurchaseCity = void 0;
-const utilities_1 = require("src/utils/utilities");
-const priceMultiplier_1 = require("src/data/priceMultiplier");
+const utilities_1 = require("../utils/utilities");
+const priceMultiplier_1 = require("../data/priceMultiplier");
 const core_1 = require("boardgame.io/core");
 const repurchaseCity = (G, ctx) => {
     //find current block

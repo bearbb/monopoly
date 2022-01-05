@@ -43,9 +43,18 @@ const Rolling = ({ G, ctx, moves, nextStage, setStage, isRollAble, incMoveCount,
         }
         return () => { };
     }, [G.playerPositions, userData.playerId]);
-    // useEffect(() => {
-    //   return () => {};
-    // }, [isInPrison]);
+    (0, react_1.useEffect)(() => {
+        if (isInPrison) {
+            toast({
+                title: "congratulation",
+                description: "u have just recruited by the Juventus club, (rolled double to get out)",
+                status: "warning",
+                isClosable: true,
+                duration: 3000,
+            });
+        }
+        return () => { };
+    }, [toast, isInPrison]);
     const diceMoveCompact = (d1, d2) => {
         moves.diceMove(d1, d2);
         setIsJustCome(true);
@@ -183,18 +192,8 @@ const Rolling = ({ G, ctx, moves, nextStage, setStage, isRollAble, incMoveCount,
             setIsJustCome(false);
         };
     }, [isJustCome]);
-    return ((0, jsx_runtime_1.jsxs)(react_2.Flex, { w: "100%", h: "60%", justifyContent: "center", alignItems: "center", gap: 5, flexDirection: "column", children: [(0, jsx_runtime_1.jsxs)(react_2.Flex, { id: "DieContainer", children: [(0, jsx_runtime_1.jsx)(Die_1.Die, { face: diceValue[0], isRolling: isRolling }, void 0), (0, jsx_runtime_1.jsx)(Die_1.Die, { face: diceValue[1], isRolling: isRolling }, void 0)] }, void 0), (0, jsx_runtime_1.jsxs)(react_2.Flex, { id: "RollBtnContainer", flexDir: "column", children: [(0, jsx_runtime_1.jsx)(react_2.Button, { fontWeight: "extrabold", size: "md", colorScheme: "orange", variant: "solid", isLoading: isRolling, isDisabled: ctx.currentPlayer != userData.playerId, onClick: () => {
-                            rollDiceHandler();
-                        }, disabled: !isRollAble || !isCurrentPlayer, border: "2px solid white", rounded: 5, children: "roll" }, void 0), (0, jsx_runtime_1.jsxs)(react_2.Flex, { children: [(0, jsx_runtime_1.jsx)(react_2.Input, { placeholder: "dice 1", onChange: (e) => {
-                                    let temp = cheatDiceValue;
-                                    temp[0] = parseInt(e.target.value);
-                                    setCheatDiceValue(temp);
-                                } }, void 0), (0, jsx_runtime_1.jsx)(react_2.Input, { placeholder: "dice 2", onChange: (e) => {
-                                    let temp = cheatDiceValue;
-                                    temp[1] = parseInt(e.target.value);
-                                    setCheatDiceValue(temp);
-                                } }, void 0), (0, jsx_runtime_1.jsx)(react_2.Button, { onClick: () => {
-                                    cheatRollHandler();
-                                }, children: "cheat roll" }, void 0)] }, void 0)] }, void 0)] }, void 0));
+    return ((0, jsx_runtime_1.jsxs)(react_2.Flex, { w: "100%", h: "60%", justifyContent: "center", alignItems: "center", gap: 5, flexDirection: "column", children: [(0, jsx_runtime_1.jsxs)(react_2.Flex, { id: "DieContainer", children: [(0, jsx_runtime_1.jsx)(Die_1.Die, { face: diceValue[0], isRolling: isRolling }, void 0), (0, jsx_runtime_1.jsx)(Die_1.Die, { face: diceValue[1], isRolling: isRolling }, void 0)] }, void 0), (0, jsx_runtime_1.jsx)(react_2.Flex, { id: "RollBtnContainer", flexDir: "column", children: (0, jsx_runtime_1.jsx)(react_2.Button, { fontWeight: "extrabold", size: "md", colorScheme: "orange", variant: "solid", isLoading: isRolling, isDisabled: ctx.currentPlayer != userData.playerId, onClick: () => {
+                        rollDiceHandler();
+                    }, disabled: !isRollAble || !isCurrentPlayer, border: "2px solid white", rounded: 5, children: "roll" }, void 0) }, void 0)] }, void 0));
 };
 exports.Rolling = Rolling;

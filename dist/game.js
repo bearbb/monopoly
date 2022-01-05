@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.monopoly = void 0;
-const blocksData_1 = require("src/data/blocksData");
-const purchaseCity_1 = require("src/moves/purchaseCity");
-const repurchaseCity_1 = require("src/moves/repurchaseCity");
-const upgradeBuilding_1 = require("src/moves/upgradeBuilding");
-const diceMove_1 = require("src/moves/diceMove");
-const cheatMove_1 = require("src/moves/cheatMove");
-const payRent_1 = require("src/moves/payRent");
-const sellAsset_1 = require("src/moves/sellAsset");
-const airportMove_1 = require("src/moves/airportMove");
-const utilities_1 = require("src/utils/utilities");
-const updateMoney_1 = require("src/moves/updateMoney");
+const blocksData_1 = require("./data/blocksData");
+const purchaseCity_1 = require("./moves/purchaseCity");
+const repurchaseCity_1 = require("./moves/repurchaseCity");
+const upgradeBuilding_1 = require("./moves/upgradeBuilding");
+const diceMove_1 = require("./moves/diceMove");
+const cheatMove_1 = require("./moves/cheatMove");
+const payRent_1 = require("./moves/payRent");
+const sellAsset_1 = require("./moves/sellAsset");
+const airportMove_1 = require("./moves/airportMove");
+const utilities_1 = require("./utils/utilities");
+const updateMoney_1 = require("./moves/updateMoney");
 exports.monopoly = {
     // create a board with 31 blocks
     setup: (ctx) => ({

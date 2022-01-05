@@ -131,11 +131,20 @@ const Board = ({ G, ctx, moves }) => {
     const [isCurrentPlayer, setIsCurrentPlayer] = (0, react_1.useState)(false);
     const [moveCount, setMoveCount] = (0, react_1.useState)(0);
     const [assetToSell, setAssetToSell] = (0, react_1.useState)([]);
-    (0, react_1.useEffect)(() => {
-        console.log(assetToSell);
-        return () => { };
-    }, [assetToSell]);
     const toast = (0, react_2.useToast)();
+    (0, react_1.useEffect)(() => {
+        if (ctx.currentPlayer === userData.playerId) {
+            toast({
+                title: "ur turn",
+                description: "make ur move",
+                status: "info",
+                position: "top",
+                duration: 1000,
+                isClosable: true,
+            });
+        }
+        return () => { };
+    }, [ctx.currentPlayer, userData, toast]);
     const incMoveCount = () => {
         let temp = moveCount + 1;
         setMoveCount(temp);
@@ -227,7 +236,10 @@ const Board = ({ G, ctx, moves }) => {
                 break;
             case 2:
                 //check if purchase able
-                if ((0, purchaseCity_1.isOwnedResort)(G, ctx) || (0, purchaseCity_1.isOwnedLevel4Building)(G, ctx)) {
+                if ((0, purchaseCity_1.isOwnedResort)(G, ctx) ||
+                    (0, purchaseCity_1.isOwnedLevel4Building)(G, ctx) ||
+                    (0, purchaseCity_1.isAlreadyOwnedCity)(G, ctx) ||
+                    !(0, purchaseCity_1.isEnoughMoneyToPurchase)(G, ctx)) {
                     console.log("Not purchase able bcs -------");
                     setStage(0);
                 }
@@ -273,8 +285,8 @@ const Board = ({ G, ctx, moves }) => {
                                                 setIsUpgradeAble(false);
                                                 setStage(0);
                                             }, children: [(0, jsx_runtime_1.jsx)(react_2.PopoverTrigger, { children: (0, jsx_runtime_1.jsx)(react_2.Button, { colorScheme: "purple", disabled: !isUpgradeAble, borderWidth: 2, borderColor: "white", w: 102, children: "upgrade" }, void 0) }, void 0), (0, jsx_runtime_1.jsx)(Upgrade_1.Upgrade, { G: G, ctx: ctx, moves: moves, setStage: setStage, moveCount: moveCount, incMoveCount: incMoveCount, endTurn: endTurn }, void 0)] }, void 0), (0, jsx_runtime_1.jsxs)(react_2.Popover, { isOpen: isSellAble, onClose: () => {
-                                                setIsSellAble(false);
+                                                // setIsSellAble(false);
                                                 setStage(2);
-                                            }, children: [(0, jsx_runtime_1.jsx)(react_2.PopoverTrigger, { children: (0, jsx_runtime_1.jsx)(react_2.Button, { colorScheme: "red", disabled: !isSellAble, borderWidth: 2, borderColor: "white", w: 102, children: "sell" }, void 0) }, void 0), (0, jsx_runtime_1.jsx)(Selling_1.Selling, { G: G, ctx: ctx, moves: moves, buildingLevel: buildingLevel, assetToSell: assetToSell, setAssetToSell: setAssetToSell, sellAssets: sellAssets }, void 0)] }, void 0)] }, void 0)] }, void 0) }, void 0)] }, void 0)] }, void 0));
+                                            }, children: [(0, jsx_runtime_1.jsx)(react_2.PopoverTrigger, { children: (0, jsx_runtime_1.jsx)(react_2.Button, { colorScheme: "red", disabled: !isSellAble, borderWidth: 2, borderColor: "white", w: 102, children: "sell" }, void 0) }, void 0), (0, jsx_runtime_1.jsx)(Selling_1.Selling, { G: G, ctx: ctx, moves: moves, buildingLevel: buildingLevel, assetToSell: assetToSell, setAssetToSell: setAssetToSell, sellAssets: sellAssets, setStage: setStage }, void 0)] }, void 0)] }, void 0)] }, void 0) }, void 0)] }, void 0)] }, void 0));
 };
 exports.Board = Board;

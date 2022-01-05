@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.availAirportMove = exports.airportMove = void 0;
 const core_1 = require("boardgame.io/core");
-const utilities_1 = require("src/utils/utilities");
+const utilities_1 = require("../utils/utilities");
 //player can move any block that not owned or that player assets (cant move to special, feature block)
 const airportMove = (G, ctx, blockIdToMoveTo) => {
     //find current block

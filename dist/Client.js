@@ -7,11 +7,14 @@ const game_1 = require("src/game");
 require("src/App.css");
 //server
 const multiplayer_1 = require("boardgame.io/multiplayer");
+const { protocol, hostname, port } = window.location;
+const server = `${protocol}//${hostname}:${port}`;
 exports.Client = (0, react_1.Client)({
     game: game_1.monopoly,
     numPlayers: 4,
     board: Board_1.Board,
-    multiplayer: (0, multiplayer_1.SocketIO)({ server: "localhost:8000" }),
+    // multiplayer: SocketIO({ server: "https://gameapi.swanoogie.me" }),
+    multiplayer: (0, multiplayer_1.SocketIO)({ server }),
     debug: false,
 });
 exports.default = exports.Client;

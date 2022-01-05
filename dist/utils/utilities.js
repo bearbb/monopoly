@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.kFormatter = exports.lobbyClient = exports.bankruptList = exports.isMonopoly = exports.getBlockPrice = exports.findCurrentBlock = void 0;
 const client_1 = require("boardgame.io/client");
-const priceMultiplier_1 = require("src/data/priceMultiplier");
-const urlData_1 = require("src/data/urlData");
+const priceMultiplier_1 = require("../data/priceMultiplier");
+const urlData_1 = require("../data/urlData");
 //find current block where user pos is
 const findCurrentBlock = (playerPositions, userId) => {
     for (let i = 0; i < playerPositions.length; i++) {
