@@ -1,6 +1,6 @@
-import { findCurrentBlock, getBlockPrice } from "src/utils/utilities";
+import { findCurrentBlock, getBlockPrice } from "../utils/utilities";
 import { INVALID_MOVE } from "boardgame.io/core";
-import { priceMultiplier } from "src/data/priceMultiplier";
+import { priceMultiplier } from "../data/priceMultiplier";
 export const purchaseCity = (G: any, ctx: any) => {
   //check if current pos is CITY or RESORT
   const playerCurrentBlock = findCurrentBlock(

@@ -1,6 +1,6 @@
 import { LobbyClient } from "boardgame.io/client";
-import { priceMultiplier } from "src/data/priceMultiplier";
-import { urlData } from "src/data/urlData";
+import { priceMultiplier } from "../data/priceMultiplier";
+import { urlData } from "../data/urlData";
 //find current block where user pos is
 export const findCurrentBlock = (
   playerPositions: Array<string[]>,

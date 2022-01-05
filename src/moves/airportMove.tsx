@@ -1,5 +1,5 @@
 import { INVALID_MOVE } from "boardgame.io/core";
-import { findCurrentBlock } from "src/utils/utilities";
+import { findCurrentBlock } from "../utils/utilities";
 
 //player can move any block that not owned or that player assets (cant move to special, feature block)
 export const airportMove = (G: any, ctx: any, blockIdToMoveTo: number) => {

@@ -1,7 +1,7 @@
-import { findCurrentBlock } from "src/utils/utilities";
-import { isHaveToPayRent, payRent } from "src/moves/payRent";
-import { addMoneyToCurrentPlayer } from "src/moves/updateMoney";
-import { moneyAmount } from "src/data/priceMultiplier";
+import { findCurrentBlock } from "../utils/utilities";
+import { isHaveToPayRent, payRent } from "../moves/payRent";
+import { addMoneyToCurrentPlayer } from "../moves/updateMoney";
+import { moneyAmount } from "../data/priceMultiplier";
 //roll dices
 const rollDices = (): { firstDice: number; secondDice: number } => {
   let firstDice = Math.floor(Math.random() * 6) + 1;

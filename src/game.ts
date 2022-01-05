@@ -1,17 +1,17 @@
-import { blocksData } from "src/data/blocksData";
-import { purchaseCity } from "src/moves/purchaseCity";
-import { repurchaseCity } from "src/moves/repurchaseCity";
-import { upgradeBuilding } from "src/moves/upgradeBuilding";
-import { diceMove, toPrison, incRollCount } from "src/moves/diceMove";
-import { cheatMove } from "src/moves/cheatMove";
-import { payRent } from "src/moves/payRent";
-import { sellAsset, sellAssets } from "src/moves/sellAsset";
-import { availAirportMove, airportMove } from "src/moves/airportMove";
-import { isMonopoly, bankruptList } from "src/utils/utilities";
-import { isDouble } from "src/utils/rollRules";
+import { blocksData } from "./data/blocksData";
+import { purchaseCity } from "./moves/purchaseCity";
+import { repurchaseCity } from "./moves/repurchaseCity";
+import { upgradeBuilding } from "./moves/upgradeBuilding";
+import { diceMove, toPrison, incRollCount } from "./moves/diceMove";
+import { cheatMove } from "./moves/cheatMove";
+import { payRent } from "./moves/payRent";
+import { sellAsset, sellAssets } from "./moves/sellAsset";
+import { availAirportMove, airportMove } from "./moves/airportMove";
+import { isMonopoly, bankruptList } from "./utils/utilities";
+import { isDouble } from "./utils/rollRules";
 import { Game } from "boardgame.io";
-import { blockData } from "src/data/blocksData";
-import { addMoneyToCurrentPlayer } from "src/moves/updateMoney";
+import { blockData } from "./data/blocksData";
+import { addMoneyToCurrentPlayer } from "./moves/updateMoney";
 
 export interface MonopolyState {
   playerPositions: any[][];

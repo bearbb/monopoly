@@ -1,5 +1,5 @@
-import { findCurrentBlock } from "src/utils/utilities";
-import { priceMultiplier } from "src/data/priceMultiplier";
+import { findCurrentBlock } from "../utils/utilities";
+import { priceMultiplier } from "../data/priceMultiplier";
 export const isHaveToPayRent = (G: any, ctx: any) => {
   // console.log(G.playerPositions, ctx.currentPlayer);
   //find current block

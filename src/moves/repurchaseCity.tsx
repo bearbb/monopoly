@@ -1,5 +1,5 @@
-import { findCurrentBlock } from "src/utils/utilities";
-import { priceMultiplier } from "src/data/priceMultiplier";
+import { findCurrentBlock } from "../utils/utilities";
+import { priceMultiplier } from "../data/priceMultiplier";
 import { INVALID_MOVE } from "boardgame.io/core";
 export const repurchaseCity = (G: any, ctx: any) => {
   //find current block

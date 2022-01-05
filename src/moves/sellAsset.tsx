@@ -1,4 +1,4 @@
-import { priceMultiplier } from "src/data/priceMultiplier";
+import { priceMultiplier } from "../data/priceMultiplier";
 import { INVALID_MOVE } from "boardgame.io/core";
 export const sellAsset = (G: any, ctx: any, blockId: number) => {
   let assetsList = listAssetPrice(G, ctx);

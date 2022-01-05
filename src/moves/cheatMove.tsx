@@ -1,5 +1,5 @@
-import { isHaveToPayRent, payRent } from "src/moves/payRent";
-import { findCurrentBlock } from "src/utils/utilities";
+import { isHaveToPayRent, payRent } from "../moves/payRent";
+import { findCurrentBlock } from "../utils/utilities";
 export const cheatMove = (G: any, ctx: any, blockIdToTeleTo: number) => {
   const userId = ctx.currentPlayer;
   //find the current block first
